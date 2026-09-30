@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "includes": ["src/**", "scripts/**", "*.json", "*.ts", "*.mts", "!next-env.d.ts"]
+  },
+  "formatter": { "indentStyle": "space", "lineWidth": 100 },
+  "linter": {
+    "rules": {
+      "complexity": { "useLiteralKeys": "off" }
+    }
+  }
+}
