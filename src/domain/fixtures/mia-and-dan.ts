@@ -5,6 +5,7 @@ import type {
   ApplicationId,
   AuditEvent,
   AuditEventId,
+  CheckItem,
   IsoDateTime,
 } from "../application";
 import { SCRIPT_FIGURES } from "../figures";
@@ -94,6 +95,55 @@ function event(sequence: number, fields: EventFields): AuditEvent {
   };
 }
 
+/** What the call leaves to check, worded with the couple's first names. The ids never change. */
+export function toCheckFor(primary: string, coApplicant: string): readonly CheckItem[] {
+  return [
+    {
+      id: "income-mia",
+      label: `${primary}'s income`,
+      reason: `${primary} stated her income on the call, so her payslips need to confirm it.`,
+      checkedAt: "credit-assessment",
+    },
+    {
+      id: "income-dan",
+      label: `${coApplicant}'s income`,
+      reason: `${primary} stated ${coApplicant}'s income on the call, so his payslips need to confirm it.`,
+      checkedAt: "credit-assessment",
+    },
+    {
+      id: "identity-dan",
+      label: `${coApplicant}'s identity`,
+      reason: `${coApplicant} was not on the call, so his identity is checked when he uploads his documents.`,
+      checkedAt: "credit-assessment",
+    },
+    {
+      id: "consent-dan",
+      label: `${coApplicant}'s consent`,
+      reason: `${coApplicant} gives his own consent to a credit check when he uploads his documents.`,
+      checkedAt: "credit-assessment",
+    },
+    {
+      id: "living-expenses",
+      label: "Living expenses",
+      reason: "The call did not cover day-to-day spending, so bank statements need to show it.",
+      checkedAt: "credit-assessment",
+    },
+    {
+      id: "debts-and-commitments",
+      label: "All debts and commitments",
+      reason: `Only what ${primary} mentioned on the call is recorded, so bank statements need to show every debt.`,
+      checkedAt: "credit-assessment",
+    },
+    {
+      id: "deposit-savings",
+      label: "Deposit savings",
+      reason:
+        "The deposit was stated on the call, so account statements need to confirm the savings.",
+      checkedAt: "credit-assessment",
+    },
+  ];
+}
+
 /** Mia and Dan's application as the call lands it: at Credit Assessment, on its first visit. */
 export const MIA_AND_DAN_AFTER_CALL: Application = {
   id: APPLICATION_ID,
@@ -127,52 +177,7 @@ export const MIA_AND_DAN_AFTER_CALL: Application = {
     confirmationSentBy: "sms",
   },
   callStartedAt: CALL_STARTED_AT,
-  toCheck: [
-    {
-      id: "income-mia",
-      label: "Mia's income",
-      reason: "Mia stated her income on the call, so her payslips need to confirm it.",
-      checkedAt: "credit-assessment",
-    },
-    {
-      id: "income-dan",
-      label: "Dan's income",
-      reason: "Mia stated Dan's income on the call, so his payslips need to confirm it.",
-      checkedAt: "credit-assessment",
-    },
-    {
-      id: "identity-dan",
-      label: "Dan's identity",
-      reason: "Dan was not on the call, so his identity is checked when he uploads his documents.",
-      checkedAt: "credit-assessment",
-    },
-    {
-      id: "consent-dan",
-      label: "Dan's consent",
-      reason: "Dan gives his own consent to a credit check when he uploads his documents.",
-      checkedAt: "credit-assessment",
-    },
-    {
-      id: "living-expenses",
-      label: "Living expenses",
-      reason: "The call did not cover day-to-day spending, so bank statements need to show it.",
-      checkedAt: "credit-assessment",
-    },
-    {
-      id: "debts-and-commitments",
-      label: "All debts and commitments",
-      reason:
-        "Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.",
-      checkedAt: "credit-assessment",
-    },
-    {
-      id: "deposit-savings",
-      label: "Deposit savings",
-      reason:
-        "The deposit was stated on the call, so account statements need to confirm the savings.",
-      checkedAt: "credit-assessment",
-    },
-  ],
+  toCheck: toCheckFor(MIA.firstName, DAN.firstName),
   audit: [
     event(1, { kind: "stage-entered", at: minutesAfterCall(0), stage: "voice-intake" }),
     event(2, {
