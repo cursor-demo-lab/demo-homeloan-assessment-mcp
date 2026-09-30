@@ -6,6 +6,7 @@ import { STAGE_BY_ID } from "@/domain/stages";
 import { storyTimeAfter } from "@/domain/story-clock";
 import { visitsTo } from "@/domain/visits";
 import { creditAssessmentEvents } from "./credit-assessment-bot";
+import { INDICATIVE } from "./serviceability";
 
 export type Handover =
   | {
@@ -44,7 +45,7 @@ export function handOver(application: Application, { confirm }: { confirm: boole
     at: storyTimeAfter(application, 1),
     kind: "bot-output",
     stage: "credit-assessment",
-    summary: `On ${ASSESSOR}'s instruction, the Grok Bot recorded its checks and handed ${names}'s file to Credit Decision. Figures are indicative, not lender policy.`,
+    summary: `On ${ASSESSOR}'s instruction, the Grok Bot prepared its checks and handed ${names}'s file to Credit Decision, where ${ASSESSOR} decides. ${INDICATIVE}.`,
   };
   const events = [
     instruction,

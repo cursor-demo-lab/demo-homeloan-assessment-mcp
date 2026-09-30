@@ -17,7 +17,7 @@ const summaries = (events: readonly AuditEvent[]) =>
   events.flatMap((event) => (event.kind === "bot-output" ? [event.summary] : []));
 
 const INSTRUCTION =
-  "On Priya Raman's instruction, the Grok Bot recorded its checks and handed Mia and Dan's file to Credit Decision. Figures are indicative, not lender policy.";
+  "On Priya Raman's instruction, the Grok Bot prepared its checks and handed Mia and Dan's file to Credit Decision, where Priya Raman decides. Indicative, not lender policy.";
 
 describe("handOver", () => {
   it("asks first, and the preview carries no record", () => {
