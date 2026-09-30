@@ -104,6 +104,10 @@ async function everyResultAtEachStep(): Promise<Said[]> {
 
 const SCRIPT_AMOUNTS = Object.values(SCRIPT_FIGURES).map(({ amount }) => formatAud(amount));
 
+/** Pasted into the Grok Bot as they are, so the server must send the same words. */
+const BOT_RULES =
+  'Rules for the assessment tools: You prepare; Priya Raman, the credit assessor, decides. Never say or imply that a loan is or will be approved. Quote figures only as a tool returns them, and put "Indicative, not lender policy" in the same reply as any figure. Keep that label exactly as the tools return it, word for word. Handing over always takes two messages from Priya. When she first asks you to hand a file over, call hand_over_to_assessor without confirm, show her what it will record, and ask her to confirm; do not set confirm yet, even though she asked. Set confirm to true only when her next message confirms. Call tools one after another, and call every tool her message needs before you reply. Keep replies short, because they are read on a big screen. All names, figures and documents are fictional.';
+
 const RPC = {
   initialize: {
     jsonrpc: "2.0",
@@ -280,9 +284,19 @@ describe("tools/list", () => {
       name: "demo-homeloan-assessment-mcp",
       version: "0.1.0",
     });
-    const instructions = client.getInstructions();
-    expect(instructions).toContain('always say "indicative, not lender policy"');
-    expect(instructions).toContain("set confirm to true only after she tells you to");
+    expect(client.getInstructions()).toBe(BOT_RULES);
+  });
+
+  it("puts the two-message handover on the handover tool too, for clients that drop the instructions", async () => {
+    const client = await connect();
+    const { tools } = await client.listTools();
+    const handover = tools.find((tool) => tool.name === "hand_over_to_assessor");
+    expect(handover?.description).toContain("Handing over always takes two messages from Priya.");
+    expect(handover?.inputSchema).toMatchObject({
+      properties: {
+        confirm: { description: "true only when Priya confirms, in her message after the preview" },
+      },
+    });
   });
 });
 

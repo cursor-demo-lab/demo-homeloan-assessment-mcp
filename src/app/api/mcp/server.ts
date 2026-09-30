@@ -14,17 +14,16 @@ import { visitsTo } from "@/domain/visits";
 import { tokenRefusal } from "./auth";
 
 const NO_APPROVAL = "Never say or imply that a loan is or will be approved.";
-const FIGURES_AS_RETURNED =
-  'Quote figures only as a tool returns them, and always say "indicative, not lender policy" with them.';
+const FIGURES_AS_RETURNED = `Quote figures only as a tool returns them, and put "${INDICATIVE}" in the same reply as any figure. Keep that label exactly as the tools return it, word for word.`;
 const CONFIRM_FIRST =
-  "Before handing a file over, call hand_over_to_assessor without confirm, tell Priya what it will record, and set confirm to true only after she tells you to.";
+  "Handing over always takes two messages from Priya. When she first asks you to hand a file over, call hand_over_to_assessor without confirm, show her what it will record, and ask her to confirm; do not set confirm yet, even though she asked. Set confirm to true only when her next message confirms.";
 
 export const INSTRUCTIONS = [
   "Rules for the assessment tools: You prepare; Priya Raman, the credit assessor, decides.",
   NO_APPROVAL,
   FIGURES_AS_RETURNED,
   CONFIRM_FIRST,
-  "Call one tool at a time. Keep replies short, because they are read on a big screen. All names, figures and documents are fictional.",
+  "Call tools one after another, and call every tool her message needs before you reply. Keep replies short, because they are read on a big screen. All names, figures and documents are fictional.",
 ].join(" ");
 
 const applicationId = z.string().min(1).describe('The file id, for example "app-mia-dan"');
@@ -298,7 +297,10 @@ export function buildServer(files: readonly Application[]): McpServer {
 
   const handoverInput = z.object({
     applicationId,
-    confirm: z.boolean().optional().describe("true only after Priya says to hand the file over"),
+    confirm: z
+      .boolean()
+      .optional()
+      .describe("true only when Priya confirms, in her message after the preview"),
   });
   server.registerTool(
     "hand_over_to_assessor",
