@@ -1,0 +1,446 @@
+[
+  {
+    "state": "landed",
+    "tool": "list_applications",
+    "args": {},
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applications\\\":[{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"applicants\\\":[\\\"Mia Castellano\\\",\\\"Dan Okafor\\\"],\\\"visit\\\":1,\\\"itemsToCheck\\\":7}]}\"}],\"structuredContent\":{\"applications\":[{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"applicants\":[\"Mia Castellano\",\"Dan Okafor\"],\"visit\":1,\"itemsToCheck\":7}]}}"
+  },
+  {
+    "state": "landed",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"stage\\\":\\\"credit-assessment\\\",\\\"visit\\\":1,\\\"canWrite\\\":true,\\\"view\\\":{\\\"id\\\":\\\"app-mia-dan\\\",\\\"identity\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"role\\\":\\\"primary\\\",\\\"firstName\\\":\\\"Mia\\\",\\\"lastName\\\":\\\"Castellano\\\",\\\"identity\\\":{\\\"status\\\":\\\"verified\\\",\\\"method\\\":\\\"sms-code\\\",\\\"at\\\":\\\"2026-10-12T19:44:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"role\\\":\\\"co-applicant\\\",\\\"firstName\\\":\\\"Dan\\\",\\\"lastName\\\":\\\"Okafor\\\",\\\"identity\\\":{\\\"status\\\":\\\"pending\\\"}}],\\\"household\\\":{\\\"relationship\\\":\\\"partners\\\",\\\"dependants\\\":0},\\\"income\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Physiotherapist\\\",\\\"employer\\\":\\\"Merri Creek Physiotherapy\\\",\\\"yearsInRole\\\":6}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":112000}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Secondary school teacher\\\",\\\"employer\\\":\\\"Coburg Hills College\\\",\\\"yearsInRole\\\":4}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":98000}}],\\\"commitments\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":[{\\\"kind\\\":\\\"credit-card\\\",\\\"description\\\":\\\"Credit card\\\",\\\"limitOrBalance\\\":8000,\\\"monthlyRepayment\\\":240}]},\\\"property-goal\\\":{\\\"purpose\\\":\\\"owner-occupier\\\",\\\"firstHomeBuyers\\\":true,\\\"targetArea\\\":\\\"Coburg, VIC\\\",\\\"purchasePrice\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":950000},\\\"deposit\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":160000},\\\"loanAmountSought\\\":790000},\\\"consent\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"consent\\\":{\\\"status\\\":\\\"given\\\",\\\"scope\\\":\\\"credit-check\\\",\\\"channel\\\":\\\"voice-call\\\",\\\"at\\\":\\\"2026-10-12T19:45:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"consent\\\":{\\\"status\\\":\\\"pending\\\"}}]},\\\"toCheck\\\":[{\\\"id\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"reason\\\":\\\"Mia stated her income on the call, so her payslips need to confirm it.\\\"},{\\\"id\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"reason\\\":\\\"Mia stated Dan's income on the call, so his payslips need to confirm it.\\\"},{\\\"id\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"reason\\\":\\\"Dan was not on the call, so his identity is checked when he uploads his documents.\\\"},{\\\"id\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"reason\\\":\\\"Dan gives his own consent to a credit check when he uploads his documents.\\\"},{\\\"id\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"reason\\\":\\\"The call did not cover day-to-day spending, so bank statements need to show it.\\\"},{\\\"id\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"reason\\\":\\\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\\\"},{\\\"id\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"reason\\\":\\\"The deposit was stated on the call, so account statements need to confirm the savings.\\\"}],\\\"documents\\\":[{\\\"id\\\":\\\"doc-payslips-mia\\\",\\\"title\\\":\\\"Mia's payslips, Merri Creek Physiotherapy\\\",\\\"shows\\\":\\\"Income of about A$112,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-mia\\\"]},{\\\"id\\\":\\\"doc-payslips-dan\\\",\\\"title\\\":\\\"Dan's payslips, Coburg Hills College\\\",\\\"shows\\\":\\\"Income of about A$98,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-dan\\\"]},{\\\"id\\\":\\\"doc-id-consent-dan\\\",\\\"title\\\":\\\"Dan's ID and credit-check consent, uploaded\\\",\\\"shows\\\":\\\"Photo ID and a signed consent to a credit check, uploaded by Dan\\\",\\\"verifies\\\":[\\\"identity-dan\\\",\\\"consent-dan\\\"]},{\\\"id\\\":\\\"doc-bank-statements\\\",\\\"title\\\":\\\"Three months of joint bank statements\\\",\\\"shows\\\":\\\"Day-to-day spending, credit card repayments and Afterpay repayments\\\",\\\"verifies\\\":[\\\"living-expenses\\\",\\\"debts-and-commitments\\\"]},{\\\"id\\\":\\\"doc-savings-statement\\\",\\\"title\\\":\\\"Savings statement\\\",\\\"shows\\\":\\\"Savings of A$160,000, the deposit stated on the call\\\",\\\"verifies\\\":[\\\"deposit-savings\\\"]},{\\\"id\\\":\\\"doc-credit-report\\\",\\\"title\\\":\\\"Credit report\\\",\\\"shows\\\":\\\"Credit card (A$8,000 limit), and an Afterpay account, open\\\",\\\"verifies\\\":[\\\"debts-and-commitments\\\"]}]}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"stage\":\"credit-assessment\",\"visit\":1,\"canWrite\":true,\"view\":{\"id\":\"app-mia-dan\",\"identity\":[{\"id\":\"applicant-mia\",\"role\":\"primary\",\"firstName\":\"Mia\",\"lastName\":\"Castellano\",\"identity\":{\"status\":\"verified\",\"method\":\"sms-code\",\"at\":\"2026-10-12T19:44:00+11:00\"}},{\"id\":\"applicant-dan\",\"role\":\"co-applicant\",\"firstName\":\"Dan\",\"lastName\":\"Okafor\",\"identity\":{\"status\":\"pending\"}}],\"household\":{\"relationship\":\"partners\",\"dependants\":0},\"income\":[{\"id\":\"applicant-mia\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Physiotherapist\",\"employer\":\"Merri Creek Physiotherapy\",\"yearsInRole\":6}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":112000}},{\"id\":\"applicant-dan\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Secondary school teacher\",\"employer\":\"Coburg Hills College\",\"yearsInRole\":4}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":98000}}],\"commitments\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":[{\"kind\":\"credit-card\",\"description\":\"Credit card\",\"limitOrBalance\":8000,\"monthlyRepayment\":240}]},\"property-goal\":{\"purpose\":\"owner-occupier\",\"firstHomeBuyers\":true,\"targetArea\":\"Coburg, VIC\",\"purchasePrice\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":950000},\"deposit\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":160000},\"loanAmountSought\":790000},\"consent\":[{\"id\":\"applicant-mia\",\"consent\":{\"status\":\"given\",\"scope\":\"credit-check\",\"channel\":\"voice-call\",\"at\":\"2026-10-12T19:45:00+11:00\"}},{\"id\":\"applicant-dan\",\"consent\":{\"status\":\"pending\"}}]},\"toCheck\":[{\"id\":\"income-mia\",\"label\":\"Mia's income\",\"reason\":\"Mia stated her income on the call, so her payslips need to confirm it.\"},{\"id\":\"income-dan\",\"label\":\"Dan's income\",\"reason\":\"Mia stated Dan's income on the call, so his payslips need to confirm it.\"},{\"id\":\"identity-dan\",\"label\":\"Dan's identity\",\"reason\":\"Dan was not on the call, so his identity is checked when he uploads his documents.\"},{\"id\":\"consent-dan\",\"label\":\"Dan's consent\",\"reason\":\"Dan gives his own consent to a credit check when he uploads his documents.\"},{\"id\":\"living-expenses\",\"label\":\"Living expenses\",\"reason\":\"The call did not cover day-to-day spending, so bank statements need to show it.\"},{\"id\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"reason\":\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\"},{\"id\":\"deposit-savings\",\"label\":\"Deposit savings\",\"reason\":\"The deposit was stated on the call, so account statements need to confirm the savings.\"}],\"documents\":[{\"id\":\"doc-payslips-mia\",\"title\":\"Mia's payslips, Merri Creek Physiotherapy\",\"shows\":\"Income of about A$112,000 a year, as stated on the call\",\"verifies\":[\"income-mia\"]},{\"id\":\"doc-payslips-dan\",\"title\":\"Dan's payslips, Coburg Hills College\",\"shows\":\"Income of about A$98,000 a year, as stated on the call\",\"verifies\":[\"income-dan\"]},{\"id\":\"doc-id-consent-dan\",\"title\":\"Dan's ID and credit-check consent, uploaded\",\"shows\":\"Photo ID and a signed consent to a credit check, uploaded by Dan\",\"verifies\":[\"identity-dan\",\"consent-dan\"]},{\"id\":\"doc-bank-statements\",\"title\":\"Three months of joint bank statements\",\"shows\":\"Day-to-day spending, credit card repayments and Afterpay repayments\",\"verifies\":[\"living-expenses\",\"debts-and-commitments\"]},{\"id\":\"doc-savings-statement\",\"title\":\"Savings statement\",\"shows\":\"Savings of A$160,000, the deposit stated on the call\",\"verifies\":[\"deposit-savings\"]},{\"id\":\"doc-credit-report\",\"title\":\"Credit report\",\"shows\":\"Credit card (A$8,000 limit), and an Afterpay account, open\",\"verifies\":[\"debts-and-commitments\"]}]}}"
+  },
+  {
+    "state": "landed",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"visit\\\":1,\\\"checks\\\":[{\\\"checkId\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"stated\\\":\\\"A$112,000 a year\\\",\\\"onDocuments\\\":\\\"About A$112,000 a year on Mia's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-mia\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"stated\\\":\\\"A$98,000 a year\\\",\\\"onDocuments\\\":\\\"About A$98,000 a year on Dan's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-dan\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's photo ID, uploaded with Dan's documents\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's signed consent to a credit check, uploaded with the ID\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Day-to-day spending on three months of joint bank statements\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"stated\\\":\\\"Credit card (A$8,000 limit)\\\",\\\"onDocuments\\\":\\\"Credit card (A$8,000 limit), and an Afterpay account with repayments on the bank statements\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\",\\\"doc-credit-report\\\"],\\\"result\\\":\\\"not-on-call\\\"},{\\\"checkId\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"stated\\\":\\\"A$160,000\\\",\\\"onDocuments\\\":\\\"Savings of A$160,000 on the savings statement\\\",\\\"evidence\\\":[\\\"doc-savings-statement\\\"],\\\"result\\\":\\\"matches\\\"}],\\\"gaps\\\":[\\\"The bank statements and credit report show an Afterpay account that wasn't mentioned on the call.\\\"]}\"}],\"structuredContent\":{\"visit\":1,\"checks\":[{\"checkId\":\"income-mia\",\"label\":\"Mia's income\",\"stated\":\"A$112,000 a year\",\"onDocuments\":\"About A$112,000 a year on Mia's payslips\",\"evidence\":[\"doc-payslips-mia\"],\"result\":\"matches\"},{\"checkId\":\"income-dan\",\"label\":\"Dan's income\",\"stated\":\"A$98,000 a year\",\"onDocuments\":\"About A$98,000 a year on Dan's payslips\",\"evidence\":[\"doc-payslips-dan\"],\"result\":\"matches\"},{\"checkId\":\"identity-dan\",\"label\":\"Dan's identity\",\"stated\":null,\"onDocuments\":\"Dan's photo ID, uploaded with Dan's documents\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"consent-dan\",\"label\":\"Dan's consent\",\"stated\":null,\"onDocuments\":\"Dan's signed consent to a credit check, uploaded with the ID\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"living-expenses\",\"label\":\"Living expenses\",\"stated\":null,\"onDocuments\":\"Day-to-day spending on three months of joint bank statements\",\"evidence\":[\"doc-bank-statements\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"stated\":\"Credit card (A$8,000 limit)\",\"onDocuments\":\"Credit card (A$8,000 limit), and an Afterpay account with repayments on the bank statements\",\"evidence\":[\"doc-bank-statements\",\"doc-credit-report\"],\"result\":\"not-on-call\"},{\"checkId\":\"deposit-savings\",\"label\":\"Deposit savings\",\"stated\":\"A$160,000\",\"onDocuments\":\"Savings of A$160,000 on the savings statement\",\"evidence\":[\"doc-savings-statement\"],\"result\":\"matches\"}],\"gaps\":[\"The bank statements and credit report show an Afterpay account that wasn't mentioned on the call.\"]}}"
+  },
+  {
+    "state": "landed",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"basis\\\":\\\"The demo script's figures. Nothing is calculated.\\\",\\\"amountNeeded\\\":790000,\\\"beforeAfterpay\\\":810000,\\\"withAfterpay\\\":760000,\\\"fallsShort\\\":true,\\\"summary\\\":\\\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it, which falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\\\"}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"basis\":\"The demo script's figures. Nothing is calculated.\",\"amountNeeded\":790000,\"beforeAfterpay\":810000,\"withAfterpay\":760000,\"fallsShort\":true,\"summary\":\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it, which falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\"}}"
+  },
+  {
+    "state": "landed",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"findings\\\":[\\\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\\\",\\\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\\\"],\\\"recommendation\\\":\\\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\\\",\\\"recorded\\\":false}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"findings\":[\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\",\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\"],\"recommendation\":\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\",\"recorded\":false}}"
+  },
+  {
+    "state": "landed",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"to\\\":\\\"Mia\\\",\\\"text\\\":\\\"Hi Mia, it's the home loan team about your application HL-26-104471. Your bank statements show an Afterpay account that wasn't mentioned on the call. Could you tell us what it's for, or send us the closure letter if you close it?\\\",\\\"sent\\\":false,\\\"howItIsSent\\\":\\\"Nothing is sent from here. Priya's 'Ask for more info' decision sends the 'more information needed' text.\\\"}\"}],\"structuredContent\":{\"to\":\"Mia\",\"text\":\"Hi Mia, it's the home loan team about your application HL-26-104471. Your bank statements show an Afterpay account that wasn't mentioned on the call. Could you tell us what it's for, or send us the closure letter if you close it?\",\"sent\":false,\"howItIsSent\":\"Nothing is sent from here. Priya's 'Ask for more info' decision sends the 'more information needed' text.\"}}"
+  },
+  {
+    "state": "landed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"status\\\":\\\"needs-confirmation\\\",\\\"findings\\\":[\\\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\\\",\\\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\\\",\\\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\\\",\\\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\\\"],\\\"stage\\\":\\\"credit-assessment\\\",\\\"message\\\":\\\"Not ready to hand over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.\\\"}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"status\":\"needs-confirmation\",\"findings\":[\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\",\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\",\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\",\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\"],\"stage\":\"credit-assessment\",\"message\":\"Not ready to hand over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.\"}}"
+  },
+  {
+    "state": "landed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan",
+      "confirm": true
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"status\\\":\\\"ready-to-hand-over\\\",\\\"findings\\\":[\\\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\\\",\\\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\\\",\\\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\\\",\\\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\\\"],\\\"stage\\\":\\\"credit-assessment\\\",\\\"message\\\":\\\"Mia and Dan's file is ready to hand over to Credit Decision with these findings. It stays at Credit Assessment until Priya Raman hands it over in the app. Nothing is stored here.\\\"}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"status\":\"ready-to-hand-over\",\"findings\":[\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\",\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\",\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\",\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\"],\"stage\":\"credit-assessment\",\"message\":\"Mia and Dan's file is ready to hand over to Credit Decision with these findings. It stays at Credit Assessment until Priya Raman hands it over in the app. Nothing is stored here.\"}}"
+  },
+  {
+    "state": "landed",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "landed",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "landed",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "landed",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "landed",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "landed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "list_applications",
+    "args": {},
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applications\\\":[]}\"}],\"structuredContent\":{\"applications\":[]}}"
+  },
+  {
+    "state": "assessed",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"stage\\\":\\\"credit-decision\\\",\\\"visit\\\":1,\\\"canWrite\\\":false,\\\"view\\\":{\\\"id\\\":\\\"app-mia-dan\\\",\\\"identity\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"role\\\":\\\"primary\\\",\\\"firstName\\\":\\\"Mia\\\",\\\"lastName\\\":\\\"Castellano\\\",\\\"identity\\\":{\\\"status\\\":\\\"verified\\\",\\\"method\\\":\\\"sms-code\\\",\\\"at\\\":\\\"2026-10-12T19:44:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"role\\\":\\\"co-applicant\\\",\\\"firstName\\\":\\\"Dan\\\",\\\"lastName\\\":\\\"Okafor\\\",\\\"identity\\\":{\\\"status\\\":\\\"pending\\\"}}],\\\"household\\\":{\\\"relationship\\\":\\\"partners\\\",\\\"dependants\\\":0},\\\"income\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Physiotherapist\\\",\\\"employer\\\":\\\"Merri Creek Physiotherapy\\\",\\\"yearsInRole\\\":6}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":112000}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Secondary school teacher\\\",\\\"employer\\\":\\\"Coburg Hills College\\\",\\\"yearsInRole\\\":4}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":98000}}],\\\"commitments\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":[{\\\"kind\\\":\\\"credit-card\\\",\\\"description\\\":\\\"Credit card\\\",\\\"limitOrBalance\\\":8000,\\\"monthlyRepayment\\\":240}]},\\\"property-goal\\\":{\\\"purpose\\\":\\\"owner-occupier\\\",\\\"firstHomeBuyers\\\":true,\\\"targetArea\\\":\\\"Coburg, VIC\\\",\\\"purchasePrice\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":950000},\\\"deposit\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":160000},\\\"loanAmountSought\\\":790000},\\\"consent\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"consent\\\":{\\\"status\\\":\\\"given\\\",\\\"scope\\\":\\\"credit-check\\\",\\\"channel\\\":\\\"voice-call\\\",\\\"at\\\":\\\"2026-10-12T19:45:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"consent\\\":{\\\"status\\\":\\\"pending\\\"}}]},\\\"toCheck\\\":[{\\\"id\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"reason\\\":\\\"Mia stated her income on the call, so her payslips need to confirm it.\\\"},{\\\"id\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"reason\\\":\\\"Mia stated Dan's income on the call, so his payslips need to confirm it.\\\"},{\\\"id\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"reason\\\":\\\"Dan was not on the call, so his identity is checked when he uploads his documents.\\\"},{\\\"id\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"reason\\\":\\\"Dan gives his own consent to a credit check when he uploads his documents.\\\"},{\\\"id\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"reason\\\":\\\"The call did not cover day-to-day spending, so bank statements need to show it.\\\"},{\\\"id\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"reason\\\":\\\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\\\"},{\\\"id\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"reason\\\":\\\"The deposit was stated on the call, so account statements need to confirm the savings.\\\"}],\\\"documents\\\":[{\\\"id\\\":\\\"doc-payslips-mia\\\",\\\"title\\\":\\\"Mia's payslips, Merri Creek Physiotherapy\\\",\\\"shows\\\":\\\"Income of about A$112,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-mia\\\"]},{\\\"id\\\":\\\"doc-payslips-dan\\\",\\\"title\\\":\\\"Dan's payslips, Coburg Hills College\\\",\\\"shows\\\":\\\"Income of about A$98,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-dan\\\"]},{\\\"id\\\":\\\"doc-id-consent-dan\\\",\\\"title\\\":\\\"Dan's ID and credit-check consent, uploaded\\\",\\\"shows\\\":\\\"Photo ID and a signed consent to a credit check, uploaded by Dan\\\",\\\"verifies\\\":[\\\"identity-dan\\\",\\\"consent-dan\\\"]},{\\\"id\\\":\\\"doc-bank-statements\\\",\\\"title\\\":\\\"Three months of joint bank statements\\\",\\\"shows\\\":\\\"Day-to-day spending, credit card repayments and Afterpay repayments\\\",\\\"verifies\\\":[\\\"living-expenses\\\",\\\"debts-and-commitments\\\"]},{\\\"id\\\":\\\"doc-savings-statement\\\",\\\"title\\\":\\\"Savings statement\\\",\\\"shows\\\":\\\"Savings of A$160,000, the deposit stated on the call\\\",\\\"verifies\\\":[\\\"deposit-savings\\\"]},{\\\"id\\\":\\\"doc-credit-report\\\",\\\"title\\\":\\\"Credit report\\\",\\\"shows\\\":\\\"Credit card (A$8,000 limit), and an Afterpay account, open\\\",\\\"verifies\\\":[\\\"debts-and-commitments\\\"]}]}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"stage\":\"credit-decision\",\"visit\":1,\"canWrite\":false,\"view\":{\"id\":\"app-mia-dan\",\"identity\":[{\"id\":\"applicant-mia\",\"role\":\"primary\",\"firstName\":\"Mia\",\"lastName\":\"Castellano\",\"identity\":{\"status\":\"verified\",\"method\":\"sms-code\",\"at\":\"2026-10-12T19:44:00+11:00\"}},{\"id\":\"applicant-dan\",\"role\":\"co-applicant\",\"firstName\":\"Dan\",\"lastName\":\"Okafor\",\"identity\":{\"status\":\"pending\"}}],\"household\":{\"relationship\":\"partners\",\"dependants\":0},\"income\":[{\"id\":\"applicant-mia\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Physiotherapist\",\"employer\":\"Merri Creek Physiotherapy\",\"yearsInRole\":6}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":112000}},{\"id\":\"applicant-dan\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Secondary school teacher\",\"employer\":\"Coburg Hills College\",\"yearsInRole\":4}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":98000}}],\"commitments\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":[{\"kind\":\"credit-card\",\"description\":\"Credit card\",\"limitOrBalance\":8000,\"monthlyRepayment\":240}]},\"property-goal\":{\"purpose\":\"owner-occupier\",\"firstHomeBuyers\":true,\"targetArea\":\"Coburg, VIC\",\"purchasePrice\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":950000},\"deposit\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":160000},\"loanAmountSought\":790000},\"consent\":[{\"id\":\"applicant-mia\",\"consent\":{\"status\":\"given\",\"scope\":\"credit-check\",\"channel\":\"voice-call\",\"at\":\"2026-10-12T19:45:00+11:00\"}},{\"id\":\"applicant-dan\",\"consent\":{\"status\":\"pending\"}}]},\"toCheck\":[{\"id\":\"income-mia\",\"label\":\"Mia's income\",\"reason\":\"Mia stated her income on the call, so her payslips need to confirm it.\"},{\"id\":\"income-dan\",\"label\":\"Dan's income\",\"reason\":\"Mia stated Dan's income on the call, so his payslips need to confirm it.\"},{\"id\":\"identity-dan\",\"label\":\"Dan's identity\",\"reason\":\"Dan was not on the call, so his identity is checked when he uploads his documents.\"},{\"id\":\"consent-dan\",\"label\":\"Dan's consent\",\"reason\":\"Dan gives his own consent to a credit check when he uploads his documents.\"},{\"id\":\"living-expenses\",\"label\":\"Living expenses\",\"reason\":\"The call did not cover day-to-day spending, so bank statements need to show it.\"},{\"id\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"reason\":\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\"},{\"id\":\"deposit-savings\",\"label\":\"Deposit savings\",\"reason\":\"The deposit was stated on the call, so account statements need to confirm the savings.\"}],\"documents\":[{\"id\":\"doc-payslips-mia\",\"title\":\"Mia's payslips, Merri Creek Physiotherapy\",\"shows\":\"Income of about A$112,000 a year, as stated on the call\",\"verifies\":[\"income-mia\"]},{\"id\":\"doc-payslips-dan\",\"title\":\"Dan's payslips, Coburg Hills College\",\"shows\":\"Income of about A$98,000 a year, as stated on the call\",\"verifies\":[\"income-dan\"]},{\"id\":\"doc-id-consent-dan\",\"title\":\"Dan's ID and credit-check consent, uploaded\",\"shows\":\"Photo ID and a signed consent to a credit check, uploaded by Dan\",\"verifies\":[\"identity-dan\",\"consent-dan\"]},{\"id\":\"doc-bank-statements\",\"title\":\"Three months of joint bank statements\",\"shows\":\"Day-to-day spending, credit card repayments and Afterpay repayments\",\"verifies\":[\"living-expenses\",\"debts-and-commitments\"]},{\"id\":\"doc-savings-statement\",\"title\":\"Savings statement\",\"shows\":\"Savings of A$160,000, the deposit stated on the call\",\"verifies\":[\"deposit-savings\"]},{\"id\":\"doc-credit-report\",\"title\":\"Credit report\",\"shows\":\"Credit card (A$8,000 limit), and an Afterpay account, open\",\"verifies\":[\"debts-and-commitments\"]}]}}"
+  },
+  {
+    "state": "assessed",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"visit\\\":1,\\\"checks\\\":[{\\\"checkId\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"stated\\\":\\\"A$112,000 a year\\\",\\\"onDocuments\\\":\\\"About A$112,000 a year on Mia's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-mia\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"stated\\\":\\\"A$98,000 a year\\\",\\\"onDocuments\\\":\\\"About A$98,000 a year on Dan's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-dan\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's photo ID, uploaded with Dan's documents\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's signed consent to a credit check, uploaded with the ID\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Day-to-day spending on three months of joint bank statements\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"stated\\\":\\\"Credit card (A$8,000 limit)\\\",\\\"onDocuments\\\":\\\"Credit card (A$8,000 limit), and an Afterpay account with repayments on the bank statements\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\",\\\"doc-credit-report\\\"],\\\"result\\\":\\\"not-on-call\\\"},{\\\"checkId\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"stated\\\":\\\"A$160,000\\\",\\\"onDocuments\\\":\\\"Savings of A$160,000 on the savings statement\\\",\\\"evidence\\\":[\\\"doc-savings-statement\\\"],\\\"result\\\":\\\"matches\\\"}],\\\"gaps\\\":[\\\"The bank statements and credit report show an Afterpay account that wasn't mentioned on the call.\\\"]}\"}],\"structuredContent\":{\"visit\":1,\"checks\":[{\"checkId\":\"income-mia\",\"label\":\"Mia's income\",\"stated\":\"A$112,000 a year\",\"onDocuments\":\"About A$112,000 a year on Mia's payslips\",\"evidence\":[\"doc-payslips-mia\"],\"result\":\"matches\"},{\"checkId\":\"income-dan\",\"label\":\"Dan's income\",\"stated\":\"A$98,000 a year\",\"onDocuments\":\"About A$98,000 a year on Dan's payslips\",\"evidence\":[\"doc-payslips-dan\"],\"result\":\"matches\"},{\"checkId\":\"identity-dan\",\"label\":\"Dan's identity\",\"stated\":null,\"onDocuments\":\"Dan's photo ID, uploaded with Dan's documents\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"consent-dan\",\"label\":\"Dan's consent\",\"stated\":null,\"onDocuments\":\"Dan's signed consent to a credit check, uploaded with the ID\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"living-expenses\",\"label\":\"Living expenses\",\"stated\":null,\"onDocuments\":\"Day-to-day spending on three months of joint bank statements\",\"evidence\":[\"doc-bank-statements\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"stated\":\"Credit card (A$8,000 limit)\",\"onDocuments\":\"Credit card (A$8,000 limit), and an Afterpay account with repayments on the bank statements\",\"evidence\":[\"doc-bank-statements\",\"doc-credit-report\"],\"result\":\"not-on-call\"},{\"checkId\":\"deposit-savings\",\"label\":\"Deposit savings\",\"stated\":\"A$160,000\",\"onDocuments\":\"Savings of A$160,000 on the savings statement\",\"evidence\":[\"doc-savings-statement\"],\"result\":\"matches\"}],\"gaps\":[\"The bank statements and credit report show an Afterpay account that wasn't mentioned on the call.\"]}}"
+  },
+  {
+    "state": "assessed",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"basis\\\":\\\"The demo script's figures. Nothing is calculated.\\\",\\\"amountNeeded\\\":790000,\\\"beforeAfterpay\\\":810000,\\\"withAfterpay\\\":760000,\\\"fallsShort\\\":true,\\\"summary\\\":\\\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it, which falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\\\"}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"basis\":\"The demo script's figures. Nothing is calculated.\",\"amountNeeded\":790000,\"beforeAfterpay\":810000,\"withAfterpay\":760000,\"fallsShort\":true,\"summary\":\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it, which falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\"}}"
+  },
+  {
+    "state": "assessed",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"findings\\\":[\\\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\\\",\\\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\\\"],\\\"recommendation\\\":\\\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\\\",\\\"recorded\\\":false}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"findings\":[\"Checked Mia and Dan's documents against what the call recorded. Found an Afterpay account that wasn't mentioned on the call.\",\"Indicative borrowing is about A$810,000 before the Afterpay commitment and about A$760,000 with it. Mia and Dan need about A$790,000.\"],\"recommendation\":\"Recommendation: ask for more information. The Afterpay commitment wasn't disclosed on the call, and with it the indicative borrowing is below what Mia and Dan need. Ask them to explain the account or close it.\",\"recorded\":false}}"
+  },
+  {
+    "state": "assessed",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"to\\\":\\\"Mia\\\",\\\"text\\\":\\\"Hi Mia, it's the home loan team about your application HL-26-104471. Your bank statements show an Afterpay account that wasn't mentioned on the call. Could you tell us what it's for, or send us the closure letter if you close it?\\\",\\\"sent\\\":false,\\\"howItIsSent\\\":\\\"Nothing is sent from here. Priya's 'Ask for more info' decision sends the 'more information needed' text.\\\"}\"}],\"structuredContent\":{\"to\":\"Mia\",\"text\":\"Hi Mia, it's the home loan team about your application HL-26-104471. Your bank statements show an Afterpay account that wasn't mentioned on the call. Could you tell us what it's for, or send us the closure letter if you close it?\",\"sent\":false,\"howItIsSent\":\"Nothing is sent from here. Priya's 'Ask for more info' decision sends the 'more information needed' text.\"}}"
+  },
+  {
+    "state": "assessed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"The file is at Credit decision now, so I can read it but can't change it.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan",
+      "confirm": true
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"The file is at Credit decision now, so I can read it but can't change it.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "assessed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "list_applications",
+    "args": {},
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applications\\\":[{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"applicants\\\":[\\\"Mia Castellano\\\",\\\"Dan Okafor\\\"],\\\"visit\\\":2,\\\"itemsToCheck\\\":7}]}\"}],\"structuredContent\":{\"applications\":[{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"applicants\":[\"Mia Castellano\",\"Dan Okafor\"],\"visit\":2,\"itemsToCheck\":7}]}}"
+  },
+  {
+    "state": "answered",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"stage\\\":\\\"credit-assessment\\\",\\\"visit\\\":2,\\\"canWrite\\\":true,\\\"view\\\":{\\\"id\\\":\\\"app-mia-dan\\\",\\\"identity\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"role\\\":\\\"primary\\\",\\\"firstName\\\":\\\"Mia\\\",\\\"lastName\\\":\\\"Castellano\\\",\\\"identity\\\":{\\\"status\\\":\\\"verified\\\",\\\"method\\\":\\\"sms-code\\\",\\\"at\\\":\\\"2026-10-12T19:44:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"role\\\":\\\"co-applicant\\\",\\\"firstName\\\":\\\"Dan\\\",\\\"lastName\\\":\\\"Okafor\\\",\\\"identity\\\":{\\\"status\\\":\\\"pending\\\"}}],\\\"household\\\":{\\\"relationship\\\":\\\"partners\\\",\\\"dependants\\\":0},\\\"income\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Physiotherapist\\\",\\\"employer\\\":\\\"Merri Creek Physiotherapy\\\",\\\"yearsInRole\\\":6}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":112000}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Secondary school teacher\\\",\\\"employer\\\":\\\"Coburg Hills College\\\",\\\"yearsInRole\\\":4}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":98000}}],\\\"commitments\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":[{\\\"kind\\\":\\\"credit-card\\\",\\\"description\\\":\\\"Credit card\\\",\\\"limitOrBalance\\\":8000,\\\"monthlyRepayment\\\":240}]},\\\"property-goal\\\":{\\\"purpose\\\":\\\"owner-occupier\\\",\\\"firstHomeBuyers\\\":true,\\\"targetArea\\\":\\\"Coburg, VIC\\\",\\\"purchasePrice\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":950000},\\\"deposit\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":160000},\\\"loanAmountSought\\\":790000},\\\"consent\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"consent\\\":{\\\"status\\\":\\\"given\\\",\\\"scope\\\":\\\"credit-check\\\",\\\"channel\\\":\\\"voice-call\\\",\\\"at\\\":\\\"2026-10-12T19:45:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"consent\\\":{\\\"status\\\":\\\"pending\\\"}}]},\\\"toCheck\\\":[{\\\"id\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"reason\\\":\\\"Mia stated her income on the call, so her payslips need to confirm it.\\\"},{\\\"id\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"reason\\\":\\\"Mia stated Dan's income on the call, so his payslips need to confirm it.\\\"},{\\\"id\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"reason\\\":\\\"Dan was not on the call, so his identity is checked when he uploads his documents.\\\"},{\\\"id\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"reason\\\":\\\"Dan gives his own consent to a credit check when he uploads his documents.\\\"},{\\\"id\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"reason\\\":\\\"The call did not cover day-to-day spending, so bank statements need to show it.\\\"},{\\\"id\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"reason\\\":\\\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\\\"},{\\\"id\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"reason\\\":\\\"The deposit was stated on the call, so account statements need to confirm the savings.\\\"}],\\\"documents\\\":[{\\\"id\\\":\\\"doc-payslips-mia\\\",\\\"title\\\":\\\"Mia's payslips, Merri Creek Physiotherapy\\\",\\\"shows\\\":\\\"Income of about A$112,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-mia\\\"]},{\\\"id\\\":\\\"doc-payslips-dan\\\",\\\"title\\\":\\\"Dan's payslips, Coburg Hills College\\\",\\\"shows\\\":\\\"Income of about A$98,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-dan\\\"]},{\\\"id\\\":\\\"doc-id-consent-dan\\\",\\\"title\\\":\\\"Dan's ID and credit-check consent, uploaded\\\",\\\"shows\\\":\\\"Photo ID and a signed consent to a credit check, uploaded by Dan\\\",\\\"verifies\\\":[\\\"identity-dan\\\",\\\"consent-dan\\\"]},{\\\"id\\\":\\\"doc-bank-statements\\\",\\\"title\\\":\\\"Three months of joint bank statements\\\",\\\"shows\\\":\\\"Day-to-day spending, credit card repayments and Afterpay repayments\\\",\\\"verifies\\\":[\\\"living-expenses\\\",\\\"debts-and-commitments\\\"]},{\\\"id\\\":\\\"doc-savings-statement\\\",\\\"title\\\":\\\"Savings statement\\\",\\\"shows\\\":\\\"Savings of A$160,000, the deposit stated on the call\\\",\\\"verifies\\\":[\\\"deposit-savings\\\"]},{\\\"id\\\":\\\"doc-credit-report\\\",\\\"title\\\":\\\"Credit report\\\",\\\"shows\\\":\\\"Credit card (A$8,000 limit), and an Afterpay account, closed\\\",\\\"verifies\\\":[\\\"debts-and-commitments\\\"]},{\\\"id\\\":\\\"doc-afterpay-closure\\\",\\\"title\\\":\\\"Afterpay closure letter\\\",\\\"shows\\\":\\\"The Afterpay account is closed\\\",\\\"verifies\\\":[\\\"debts-and-commitments\\\"]}]}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"stage\":\"credit-assessment\",\"visit\":2,\"canWrite\":true,\"view\":{\"id\":\"app-mia-dan\",\"identity\":[{\"id\":\"applicant-mia\",\"role\":\"primary\",\"firstName\":\"Mia\",\"lastName\":\"Castellano\",\"identity\":{\"status\":\"verified\",\"method\":\"sms-code\",\"at\":\"2026-10-12T19:44:00+11:00\"}},{\"id\":\"applicant-dan\",\"role\":\"co-applicant\",\"firstName\":\"Dan\",\"lastName\":\"Okafor\",\"identity\":{\"status\":\"pending\"}}],\"household\":{\"relationship\":\"partners\",\"dependants\":0},\"income\":[{\"id\":\"applicant-mia\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Physiotherapist\",\"employer\":\"Merri Creek Physiotherapy\",\"yearsInRole\":6}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":112000}},{\"id\":\"applicant-dan\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Secondary school teacher\",\"employer\":\"Coburg Hills College\",\"yearsInRole\":4}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":98000}}],\"commitments\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":[{\"kind\":\"credit-card\",\"description\":\"Credit card\",\"limitOrBalance\":8000,\"monthlyRepayment\":240}]},\"property-goal\":{\"purpose\":\"owner-occupier\",\"firstHomeBuyers\":true,\"targetArea\":\"Coburg, VIC\",\"purchasePrice\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":950000},\"deposit\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":160000},\"loanAmountSought\":790000},\"consent\":[{\"id\":\"applicant-mia\",\"consent\":{\"status\":\"given\",\"scope\":\"credit-check\",\"channel\":\"voice-call\",\"at\":\"2026-10-12T19:45:00+11:00\"}},{\"id\":\"applicant-dan\",\"consent\":{\"status\":\"pending\"}}]},\"toCheck\":[{\"id\":\"income-mia\",\"label\":\"Mia's income\",\"reason\":\"Mia stated her income on the call, so her payslips need to confirm it.\"},{\"id\":\"income-dan\",\"label\":\"Dan's income\",\"reason\":\"Mia stated Dan's income on the call, so his payslips need to confirm it.\"},{\"id\":\"identity-dan\",\"label\":\"Dan's identity\",\"reason\":\"Dan was not on the call, so his identity is checked when he uploads his documents.\"},{\"id\":\"consent-dan\",\"label\":\"Dan's consent\",\"reason\":\"Dan gives his own consent to a credit check when he uploads his documents.\"},{\"id\":\"living-expenses\",\"label\":\"Living expenses\",\"reason\":\"The call did not cover day-to-day spending, so bank statements need to show it.\"},{\"id\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"reason\":\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\"},{\"id\":\"deposit-savings\",\"label\":\"Deposit savings\",\"reason\":\"The deposit was stated on the call, so account statements need to confirm the savings.\"}],\"documents\":[{\"id\":\"doc-payslips-mia\",\"title\":\"Mia's payslips, Merri Creek Physiotherapy\",\"shows\":\"Income of about A$112,000 a year, as stated on the call\",\"verifies\":[\"income-mia\"]},{\"id\":\"doc-payslips-dan\",\"title\":\"Dan's payslips, Coburg Hills College\",\"shows\":\"Income of about A$98,000 a year, as stated on the call\",\"verifies\":[\"income-dan\"]},{\"id\":\"doc-id-consent-dan\",\"title\":\"Dan's ID and credit-check consent, uploaded\",\"shows\":\"Photo ID and a signed consent to a credit check, uploaded by Dan\",\"verifies\":[\"identity-dan\",\"consent-dan\"]},{\"id\":\"doc-bank-statements\",\"title\":\"Three months of joint bank statements\",\"shows\":\"Day-to-day spending, credit card repayments and Afterpay repayments\",\"verifies\":[\"living-expenses\",\"debts-and-commitments\"]},{\"id\":\"doc-savings-statement\",\"title\":\"Savings statement\",\"shows\":\"Savings of A$160,000, the deposit stated on the call\",\"verifies\":[\"deposit-savings\"]},{\"id\":\"doc-credit-report\",\"title\":\"Credit report\",\"shows\":\"Credit card (A$8,000 limit), and an Afterpay account, closed\",\"verifies\":[\"debts-and-commitments\"]},{\"id\":\"doc-afterpay-closure\",\"title\":\"Afterpay closure letter\",\"shows\":\"The Afterpay account is closed\",\"verifies\":[\"debts-and-commitments\"]}]}}"
+  },
+  {
+    "state": "answered",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"visit\\\":2,\\\"checks\\\":[{\\\"checkId\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"stated\\\":\\\"A$112,000 a year\\\",\\\"onDocuments\\\":\\\"About A$112,000 a year on Mia's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-mia\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"stated\\\":\\\"A$98,000 a year\\\",\\\"onDocuments\\\":\\\"About A$98,000 a year on Dan's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-dan\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's photo ID, uploaded with Dan's documents\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's signed consent to a credit check, uploaded with the ID\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Day-to-day spending on three months of joint bank statements\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"stated\\\":\\\"Credit card (A$8,000 limit)\\\",\\\"onDocuments\\\":\\\"Credit card (A$8,000 limit). The Afterpay account is closed, and the closure letter is on file\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\",\\\"doc-credit-report\\\",\\\"doc-afterpay-closure\\\"],\\\"result\\\":\\\"closed\\\"},{\\\"checkId\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"stated\\\":\\\"A$160,000\\\",\\\"onDocuments\\\":\\\"Savings of A$160,000 on the savings statement\\\",\\\"evidence\\\":[\\\"doc-savings-statement\\\"],\\\"result\\\":\\\"matches\\\"}],\\\"gaps\\\":[]}\"}],\"structuredContent\":{\"visit\":2,\"checks\":[{\"checkId\":\"income-mia\",\"label\":\"Mia's income\",\"stated\":\"A$112,000 a year\",\"onDocuments\":\"About A$112,000 a year on Mia's payslips\",\"evidence\":[\"doc-payslips-mia\"],\"result\":\"matches\"},{\"checkId\":\"income-dan\",\"label\":\"Dan's income\",\"stated\":\"A$98,000 a year\",\"onDocuments\":\"About A$98,000 a year on Dan's payslips\",\"evidence\":[\"doc-payslips-dan\"],\"result\":\"matches\"},{\"checkId\":\"identity-dan\",\"label\":\"Dan's identity\",\"stated\":null,\"onDocuments\":\"Dan's photo ID, uploaded with Dan's documents\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"consent-dan\",\"label\":\"Dan's consent\",\"stated\":null,\"onDocuments\":\"Dan's signed consent to a credit check, uploaded with the ID\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"living-expenses\",\"label\":\"Living expenses\",\"stated\":null,\"onDocuments\":\"Day-to-day spending on three months of joint bank statements\",\"evidence\":[\"doc-bank-statements\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"stated\":\"Credit card (A$8,000 limit)\",\"onDocuments\":\"Credit card (A$8,000 limit). The Afterpay account is closed, and the closure letter is on file\",\"evidence\":[\"doc-bank-statements\",\"doc-credit-report\",\"doc-afterpay-closure\"],\"result\":\"closed\"},{\"checkId\":\"deposit-savings\",\"label\":\"Deposit savings\",\"stated\":\"A$160,000\",\"onDocuments\":\"Savings of A$160,000 on the savings statement\",\"evidence\":[\"doc-savings-statement\"],\"result\":\"matches\"}],\"gaps\":[]}}"
+  },
+  {
+    "state": "answered",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"basis\\\":\\\"The demo script's figures. Nothing is calculated.\\\",\\\"amountNeeded\\\":790000,\\\"beforeAfterpay\\\":null,\\\"withAfterpay\\\":null,\\\"fallsShort\\\":false,\\\"summary\\\":\\\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\\\"}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"basis\":\"The demo script's figures. Nothing is calculated.\",\"amountNeeded\":790000,\"beforeAfterpay\":null,\"withAfterpay\":null,\"fallsShort\":false,\"summary\":\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\"}}"
+  },
+  {
+    "state": "answered",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"findings\\\":[\\\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\\\",\\\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\\\"],\\\"recommendation\\\":\\\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\\\",\\\"recorded\\\":false}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"findings\":[\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\",\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\"],\"recommendation\":\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\",\"recorded\":false}}"
+  },
+  {
+    "state": "answered",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"Nothing is missing on this visit, so there's no request to draft.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"status\\\":\\\"needs-confirmation\\\",\\\"findings\\\":[\\\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\\\",\\\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\\\",\\\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\\\",\\\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\\\"],\\\"stage\\\":\\\"credit-assessment\\\",\\\"message\\\":\\\"Not ready to hand over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.\\\"}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"status\":\"needs-confirmation\",\"findings\":[\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\",\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\",\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\",\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\"],\"stage\":\"credit-assessment\",\"message\":\"Not ready to hand over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.\"}}"
+  },
+  {
+    "state": "answered",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan",
+      "confirm": true
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"status\\\":\\\"ready-to-hand-over\\\",\\\"findings\\\":[\\\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\\\",\\\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\\\",\\\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\\\",\\\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\\\"],\\\"stage\\\":\\\"credit-assessment\\\",\\\"message\\\":\\\"Mia and Dan's file is ready to hand over to Credit Decision with these findings. It stays at Credit Assessment until Priya Raman hands it over in the app. Nothing is stored here.\\\"}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"status\":\"ready-to-hand-over\",\"findings\":[\"On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.\",\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\",\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\",\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\"],\"stage\":\"credit-assessment\",\"message\":\"Mia and Dan's file is ready to hand over to Credit Decision with these findings. It stays at Credit Assessment until Priya Raman hands it over in the app. Nothing is stored here.\"}}"
+  },
+  {
+    "state": "answered",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "answered",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "list_applications",
+    "args": {},
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applications\\\":[]}\"}],\"structuredContent\":{\"applications\":[]}}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"applicationId\\\":\\\"app-mia-dan\\\",\\\"reference\\\":\\\"HL-26-104471\\\",\\\"stage\\\":\\\"credit-decision\\\",\\\"visit\\\":2,\\\"canWrite\\\":false,\\\"view\\\":{\\\"id\\\":\\\"app-mia-dan\\\",\\\"identity\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"role\\\":\\\"primary\\\",\\\"firstName\\\":\\\"Mia\\\",\\\"lastName\\\":\\\"Castellano\\\",\\\"identity\\\":{\\\"status\\\":\\\"verified\\\",\\\"method\\\":\\\"sms-code\\\",\\\"at\\\":\\\"2026-10-12T19:44:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"role\\\":\\\"co-applicant\\\",\\\"firstName\\\":\\\"Dan\\\",\\\"lastName\\\":\\\"Okafor\\\",\\\"identity\\\":{\\\"status\\\":\\\"pending\\\"}}],\\\"household\\\":{\\\"relationship\\\":\\\"partners\\\",\\\"dependants\\\":0},\\\"income\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Physiotherapist\\\",\\\"employer\\\":\\\"Merri Creek Physiotherapy\\\",\\\"yearsInRole\\\":6}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":112000}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"employment\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":{\\\"basis\\\":\\\"full-time\\\",\\\"occupation\\\":\\\"Secondary school teacher\\\",\\\"employer\\\":\\\"Coburg Hills College\\\",\\\"yearsInRole\\\":4}},\\\"annualIncome\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":98000}}],\\\"commitments\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":[{\\\"kind\\\":\\\"credit-card\\\",\\\"description\\\":\\\"Credit card\\\",\\\"limitOrBalance\\\":8000,\\\"monthlyRepayment\\\":240}]},\\\"property-goal\\\":{\\\"purpose\\\":\\\"owner-occupier\\\",\\\"firstHomeBuyers\\\":true,\\\"targetArea\\\":\\\"Coburg, VIC\\\",\\\"purchasePrice\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":950000},\\\"deposit\\\":{\\\"status\\\":\\\"stated\\\",\\\"source\\\":\\\"voice-call\\\",\\\"value\\\":160000},\\\"loanAmountSought\\\":790000},\\\"consent\\\":[{\\\"id\\\":\\\"applicant-mia\\\",\\\"consent\\\":{\\\"status\\\":\\\"given\\\",\\\"scope\\\":\\\"credit-check\\\",\\\"channel\\\":\\\"voice-call\\\",\\\"at\\\":\\\"2026-10-12T19:45:00+11:00\\\"}},{\\\"id\\\":\\\"applicant-dan\\\",\\\"consent\\\":{\\\"status\\\":\\\"pending\\\"}}]},\\\"toCheck\\\":[{\\\"id\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"reason\\\":\\\"Mia stated her income on the call, so her payslips need to confirm it.\\\"},{\\\"id\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"reason\\\":\\\"Mia stated Dan's income on the call, so his payslips need to confirm it.\\\"},{\\\"id\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"reason\\\":\\\"Dan was not on the call, so his identity is checked when he uploads his documents.\\\"},{\\\"id\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"reason\\\":\\\"Dan gives his own consent to a credit check when he uploads his documents.\\\"},{\\\"id\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"reason\\\":\\\"The call did not cover day-to-day spending, so bank statements need to show it.\\\"},{\\\"id\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"reason\\\":\\\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\\\"},{\\\"id\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"reason\\\":\\\"The deposit was stated on the call, so account statements need to confirm the savings.\\\"}],\\\"documents\\\":[{\\\"id\\\":\\\"doc-payslips-mia\\\",\\\"title\\\":\\\"Mia's payslips, Merri Creek Physiotherapy\\\",\\\"shows\\\":\\\"Income of about A$112,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-mia\\\"]},{\\\"id\\\":\\\"doc-payslips-dan\\\",\\\"title\\\":\\\"Dan's payslips, Coburg Hills College\\\",\\\"shows\\\":\\\"Income of about A$98,000 a year, as stated on the call\\\",\\\"verifies\\\":[\\\"income-dan\\\"]},{\\\"id\\\":\\\"doc-id-consent-dan\\\",\\\"title\\\":\\\"Dan's ID and credit-check consent, uploaded\\\",\\\"shows\\\":\\\"Photo ID and a signed consent to a credit check, uploaded by Dan\\\",\\\"verifies\\\":[\\\"identity-dan\\\",\\\"consent-dan\\\"]},{\\\"id\\\":\\\"doc-bank-statements\\\",\\\"title\\\":\\\"Three months of joint bank statements\\\",\\\"shows\\\":\\\"Day-to-day spending, credit card repayments and Afterpay repayments\\\",\\\"verifies\\\":[\\\"living-expenses\\\",\\\"debts-and-commitments\\\"]},{\\\"id\\\":\\\"doc-savings-statement\\\",\\\"title\\\":\\\"Savings statement\\\",\\\"shows\\\":\\\"Savings of A$160,000, the deposit stated on the call\\\",\\\"verifies\\\":[\\\"deposit-savings\\\"]},{\\\"id\\\":\\\"doc-credit-report\\\",\\\"title\\\":\\\"Credit report\\\",\\\"shows\\\":\\\"Credit card (A$8,000 limit), and an Afterpay account, closed\\\",\\\"verifies\\\":[\\\"debts-and-commitments\\\"]},{\\\"id\\\":\\\"doc-afterpay-closure\\\",\\\"title\\\":\\\"Afterpay closure letter\\\",\\\"shows\\\":\\\"The Afterpay account is closed\\\",\\\"verifies\\\":[\\\"debts-and-commitments\\\"]}]}\"}],\"structuredContent\":{\"applicationId\":\"app-mia-dan\",\"reference\":\"HL-26-104471\",\"stage\":\"credit-decision\",\"visit\":2,\"canWrite\":false,\"view\":{\"id\":\"app-mia-dan\",\"identity\":[{\"id\":\"applicant-mia\",\"role\":\"primary\",\"firstName\":\"Mia\",\"lastName\":\"Castellano\",\"identity\":{\"status\":\"verified\",\"method\":\"sms-code\",\"at\":\"2026-10-12T19:44:00+11:00\"}},{\"id\":\"applicant-dan\",\"role\":\"co-applicant\",\"firstName\":\"Dan\",\"lastName\":\"Okafor\",\"identity\":{\"status\":\"pending\"}}],\"household\":{\"relationship\":\"partners\",\"dependants\":0},\"income\":[{\"id\":\"applicant-mia\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Physiotherapist\",\"employer\":\"Merri Creek Physiotherapy\",\"yearsInRole\":6}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":112000}},{\"id\":\"applicant-dan\",\"employment\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":{\"basis\":\"full-time\",\"occupation\":\"Secondary school teacher\",\"employer\":\"Coburg Hills College\",\"yearsInRole\":4}},\"annualIncome\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":98000}}],\"commitments\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":[{\"kind\":\"credit-card\",\"description\":\"Credit card\",\"limitOrBalance\":8000,\"monthlyRepayment\":240}]},\"property-goal\":{\"purpose\":\"owner-occupier\",\"firstHomeBuyers\":true,\"targetArea\":\"Coburg, VIC\",\"purchasePrice\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":950000},\"deposit\":{\"status\":\"stated\",\"source\":\"voice-call\",\"value\":160000},\"loanAmountSought\":790000},\"consent\":[{\"id\":\"applicant-mia\",\"consent\":{\"status\":\"given\",\"scope\":\"credit-check\",\"channel\":\"voice-call\",\"at\":\"2026-10-12T19:45:00+11:00\"}},{\"id\":\"applicant-dan\",\"consent\":{\"status\":\"pending\"}}]},\"toCheck\":[{\"id\":\"income-mia\",\"label\":\"Mia's income\",\"reason\":\"Mia stated her income on the call, so her payslips need to confirm it.\"},{\"id\":\"income-dan\",\"label\":\"Dan's income\",\"reason\":\"Mia stated Dan's income on the call, so his payslips need to confirm it.\"},{\"id\":\"identity-dan\",\"label\":\"Dan's identity\",\"reason\":\"Dan was not on the call, so his identity is checked when he uploads his documents.\"},{\"id\":\"consent-dan\",\"label\":\"Dan's consent\",\"reason\":\"Dan gives his own consent to a credit check when he uploads his documents.\"},{\"id\":\"living-expenses\",\"label\":\"Living expenses\",\"reason\":\"The call did not cover day-to-day spending, so bank statements need to show it.\"},{\"id\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"reason\":\"Only what Mia mentioned on the call is recorded, so bank statements need to show every debt.\"},{\"id\":\"deposit-savings\",\"label\":\"Deposit savings\",\"reason\":\"The deposit was stated on the call, so account statements need to confirm the savings.\"}],\"documents\":[{\"id\":\"doc-payslips-mia\",\"title\":\"Mia's payslips, Merri Creek Physiotherapy\",\"shows\":\"Income of about A$112,000 a year, as stated on the call\",\"verifies\":[\"income-mia\"]},{\"id\":\"doc-payslips-dan\",\"title\":\"Dan's payslips, Coburg Hills College\",\"shows\":\"Income of about A$98,000 a year, as stated on the call\",\"verifies\":[\"income-dan\"]},{\"id\":\"doc-id-consent-dan\",\"title\":\"Dan's ID and credit-check consent, uploaded\",\"shows\":\"Photo ID and a signed consent to a credit check, uploaded by Dan\",\"verifies\":[\"identity-dan\",\"consent-dan\"]},{\"id\":\"doc-bank-statements\",\"title\":\"Three months of joint bank statements\",\"shows\":\"Day-to-day spending, credit card repayments and Afterpay repayments\",\"verifies\":[\"living-expenses\",\"debts-and-commitments\"]},{\"id\":\"doc-savings-statement\",\"title\":\"Savings statement\",\"shows\":\"Savings of A$160,000, the deposit stated on the call\",\"verifies\":[\"deposit-savings\"]},{\"id\":\"doc-credit-report\",\"title\":\"Credit report\",\"shows\":\"Credit card (A$8,000 limit), and an Afterpay account, closed\",\"verifies\":[\"debts-and-commitments\"]},{\"id\":\"doc-afterpay-closure\",\"title\":\"Afterpay closure letter\",\"shows\":\"The Afterpay account is closed\",\"verifies\":[\"debts-and-commitments\"]}]}}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"visit\\\":2,\\\"checks\\\":[{\\\"checkId\\\":\\\"income-mia\\\",\\\"label\\\":\\\"Mia's income\\\",\\\"stated\\\":\\\"A$112,000 a year\\\",\\\"onDocuments\\\":\\\"About A$112,000 a year on Mia's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-mia\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"income-dan\\\",\\\"label\\\":\\\"Dan's income\\\",\\\"stated\\\":\\\"A$98,000 a year\\\",\\\"onDocuments\\\":\\\"About A$98,000 a year on Dan's payslips\\\",\\\"evidence\\\":[\\\"doc-payslips-dan\\\"],\\\"result\\\":\\\"matches\\\"},{\\\"checkId\\\":\\\"identity-dan\\\",\\\"label\\\":\\\"Dan's identity\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's photo ID, uploaded with Dan's documents\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"consent-dan\\\",\\\"label\\\":\\\"Dan's consent\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Dan's signed consent to a credit check, uploaded with the ID\\\",\\\"evidence\\\":[\\\"doc-id-consent-dan\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"living-expenses\\\",\\\"label\\\":\\\"Living expenses\\\",\\\"stated\\\":null,\\\"onDocuments\\\":\\\"Day-to-day spending on three months of joint bank statements\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\"],\\\"result\\\":\\\"shown-on-documents\\\"},{\\\"checkId\\\":\\\"debts-and-commitments\\\",\\\"label\\\":\\\"All debts and commitments\\\",\\\"stated\\\":\\\"Credit card (A$8,000 limit)\\\",\\\"onDocuments\\\":\\\"Credit card (A$8,000 limit). The Afterpay account is closed, and the closure letter is on file\\\",\\\"evidence\\\":[\\\"doc-bank-statements\\\",\\\"doc-credit-report\\\",\\\"doc-afterpay-closure\\\"],\\\"result\\\":\\\"closed\\\"},{\\\"checkId\\\":\\\"deposit-savings\\\",\\\"label\\\":\\\"Deposit savings\\\",\\\"stated\\\":\\\"A$160,000\\\",\\\"onDocuments\\\":\\\"Savings of A$160,000 on the savings statement\\\",\\\"evidence\\\":[\\\"doc-savings-statement\\\"],\\\"result\\\":\\\"matches\\\"}],\\\"gaps\\\":[]}\"}],\"structuredContent\":{\"visit\":2,\"checks\":[{\"checkId\":\"income-mia\",\"label\":\"Mia's income\",\"stated\":\"A$112,000 a year\",\"onDocuments\":\"About A$112,000 a year on Mia's payslips\",\"evidence\":[\"doc-payslips-mia\"],\"result\":\"matches\"},{\"checkId\":\"income-dan\",\"label\":\"Dan's income\",\"stated\":\"A$98,000 a year\",\"onDocuments\":\"About A$98,000 a year on Dan's payslips\",\"evidence\":[\"doc-payslips-dan\"],\"result\":\"matches\"},{\"checkId\":\"identity-dan\",\"label\":\"Dan's identity\",\"stated\":null,\"onDocuments\":\"Dan's photo ID, uploaded with Dan's documents\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"consent-dan\",\"label\":\"Dan's consent\",\"stated\":null,\"onDocuments\":\"Dan's signed consent to a credit check, uploaded with the ID\",\"evidence\":[\"doc-id-consent-dan\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"living-expenses\",\"label\":\"Living expenses\",\"stated\":null,\"onDocuments\":\"Day-to-day spending on three months of joint bank statements\",\"evidence\":[\"doc-bank-statements\"],\"result\":\"shown-on-documents\"},{\"checkId\":\"debts-and-commitments\",\"label\":\"All debts and commitments\",\"stated\":\"Credit card (A$8,000 limit)\",\"onDocuments\":\"Credit card (A$8,000 limit). The Afterpay account is closed, and the closure letter is on file\",\"evidence\":[\"doc-bank-statements\",\"doc-credit-report\",\"doc-afterpay-closure\"],\"result\":\"closed\"},{\"checkId\":\"deposit-savings\",\"label\":\"Deposit savings\",\"stated\":\"A$160,000\",\"onDocuments\":\"Savings of A$160,000 on the savings statement\",\"evidence\":[\"doc-savings-statement\"],\"result\":\"matches\"}],\"gaps\":[]}}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"basis\\\":\\\"The demo script's figures. Nothing is calculated.\\\",\\\"amountNeeded\\\":790000,\\\"beforeAfterpay\\\":null,\\\"withAfterpay\\\":null,\\\"fallsShort\\\":false,\\\"summary\\\":\\\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\\\"}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"basis\":\"The demo script's figures. Nothing is calculated.\",\"amountNeeded\":790000,\"beforeAfterpay\":null,\"withAfterpay\":null,\"fallsShort\":false,\"summary\":\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000). Indicative, not lender policy.\"}}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"label\\\":\\\"Indicative, not lender policy\\\",\\\"findings\\\":[\\\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\\\",\\\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\\\"],\\\"recommendation\\\":\\\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\\\",\\\"recorded\\\":false}\"}],\"structuredContent\":{\"label\":\"Indicative, not lender policy\",\"findings\":[\"Re-checked Mia and Dan's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.\",\"Without the Afterpay commitment, the indicative borrowing no longer falls short of what Mia and Dan need (about A$790,000).\"],\"recommendation\":\"Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Mia and Dan need.\",\"recorded\":false}}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"Nothing is missing on this visit, so there's no request to draft.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"The file is at Credit decision now, so I can read it but can't change it.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-mia-dan",
+      "confirm": true
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"The file is at Credit decision now, so I can read it but can't change it.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "get_application",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "check_documents",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "indicative_serviceability",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "draft_assessor_notes",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "draft_customer_request",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  },
+  {
+    "state": "reassessed",
+    "tool": "hand_over_to_assessor",
+    "args": {
+      "applicationId": "app-nobody"
+    },
+    "reply": "{\"content\":[{\"type\":\"text\",\"text\":\"There's no application with that id.\"}],\"isError\":true}"
+  }
+]

@@ -2,7 +2,7 @@ import { viewFor } from "@/domain/access";
 import type { Application } from "@/domain/application";
 import { formatAud } from "@/domain/money";
 import { visitsTo } from "@/domain/visits";
-import { afterpayClosed, documentsOnFile, peopleOn, statedDebts } from "./documents";
+import { afterpayClosed, debtsAnd, documentsOnFile, peopleOn, statedDebts } from "./documents";
 
 export type CheckResult = "matches" | "shown-on-documents" | "not-on-call" | "closed";
 
@@ -74,12 +74,19 @@ export function checkDocuments(application: Application): DocumentChecks {
       closed
         ? {
             stated: debts,
-            onDocuments: `${debts}. The Afterpay account is closed, and the closure letter is on file`,
+            onDocuments: debtsAnd(
+              view,
+              "The Afterpay account is closed, and the closure letter is on file",
+              ". ",
+            ),
             result: "closed",
           }
         : {
             stated: debts,
-            onDocuments: `${debts}, and an Afterpay account with repayments on the bank statements`,
+            onDocuments: debtsAnd(
+              view,
+              "an Afterpay account with repayments on the bank statements",
+            ),
             result: "not-on-call",
           },
     ],

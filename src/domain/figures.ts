@@ -1,8 +1,9 @@
 import { aud } from "./money";
 
 /**
- * The only borrowing figures the demo script quotes. Nothing recalculates them, and there
- * is deliberately no re-checked figure after the Afterpay account closes.
+ * The only borrowing figures the demo script quotes. The indicative formula gives exactly
+ * these from the script's answers, and there is deliberately no re-checked figure after the
+ * Afterpay account closes.
  */
 export const SCRIPT_FIGURES = {
   borrowingBeforeAfterpay: {

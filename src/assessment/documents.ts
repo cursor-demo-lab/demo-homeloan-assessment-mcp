@@ -18,22 +18,38 @@ export interface Person {
   readonly income: StageView<"credit-assessment">["income"][number];
 }
 
+/** The slug comes from the applicant's id, so a name the call changes keeps every id. */
 export function peopleOn(view: StageView<"credit-assessment">): readonly Person[] {
   return view.identity.flatMap(({ id, firstName, identity }) =>
     view.income
       .filter((income) => income.id === id)
-      .map((income) => ({ firstName, slug: firstName.toLowerCase(), identity, income })),
+      .map((income) => ({ firstName, slug: id.replace(/^applicant-/u, ""), identity, income })),
   );
 }
 
+/** What the call declared, or "None". */
 export function statedDebts(view: StageView<"credit-assessment">): string {
-  return view.commitments.value
-    .map(
-      ({ kind, description, limitOrBalance }) =>
-        `${description} (${formatAud(limitOrBalance)} ${kind === "credit-card" ? "limit" : "balance"})`,
-    )
-    .join(", ");
+  const debts = view.commitments.value.map(
+    ({ kind, description, limitOrBalance }) =>
+      `${description} (${formatAud(limitOrBalance)} ${kind === "credit-card" ? "limit" : "balance"})`,
+  );
+  return debts.length > 0 ? debts.join(", ") : "None";
 }
+
+/** The declared debts, then `more`: "Credit card (A$8,000 limit), and an Afterpay account". */
+export function debtsAnd(
+  view: StageView<"credit-assessment">,
+  more: string,
+  joiner = ", and ",
+): string {
+  return view.commitments.value.length > 0
+    ? `${statedDebts(view)}${joiner}${more}`
+    : `${more.charAt(0).toUpperCase()}${more.slice(1)}`;
+}
+
+/** "A, B and C". */
+const listed = (items: readonly string[]) =>
+  items.length > 1 ? `${items.slice(0, -1).join(", ")} and ${items.at(-1)}` : items.join("");
 
 export function afterpayClosed(application: Application): boolean {
   return visitsTo(application, "credit-assessment") > 1;
@@ -63,7 +79,11 @@ export function documentsOnFile(application: Application): readonly AssessmentDo
     {
       id: "doc-bank-statements",
       title: "Three months of joint bank statements",
-      shows: `Day-to-day spending, ${repayments.map((debt) => `${debt} repayments`).join(", ")} and Afterpay repayments`,
+      shows: listed([
+        "Day-to-day spending",
+        ...repayments.map((debt) => `${debt} repayments`),
+        "Afterpay repayments",
+      ]),
       verifies: ["living-expenses", "debts-and-commitments"],
     },
     {
@@ -75,7 +95,7 @@ export function documentsOnFile(application: Application): readonly AssessmentDo
     {
       id: "doc-credit-report",
       title: "Credit report",
-      shows: `${statedDebts(view)}, and an Afterpay account, ${closed ? "closed" : "open"}`,
+      shows: debtsAnd(view, `an Afterpay account, ${closed ? "closed" : "open"}`),
       verifies: ["debts-and-commitments"],
     },
     ...(closed

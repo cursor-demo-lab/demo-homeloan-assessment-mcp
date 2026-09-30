@@ -5,12 +5,20 @@ import { checkDocuments } from "@/assessment/checks";
 import { documentsOnFile } from "@/assessment/documents";
 import { draftAssessorNotes, draftCustomerRequest, HOW_IT_IS_SENT } from "@/assessment/drafts";
 import { handOver } from "@/assessment/handover";
-import { BASIS, INDICATIVE, indicativeServiceability } from "@/assessment/serviceability";
+import {
+  BASIS,
+  CALL_BASIS,
+  INDICATIVE,
+  indicativeServiceability,
+} from "@/assessment/serviceability";
 import { viewFor } from "@/domain/access";
 import type { Application } from "@/domain/application";
 import { currentStage } from "@/domain/application";
 import { STAGES } from "@/domain/stages";
 import { visitsTo } from "@/domain/visits";
+import { applyIntake, capturedOf } from "@/intake/apply";
+import type { IntakeFields, IntakeKey } from "@/intake/fields";
+import { INTAKE_FILE, INTAKE_KEYS } from "@/intake/fields";
 import { tokenRefusal } from "./auth";
 
 const NO_APPROVAL = "Never say or imply that a loan is or will be approved.";
@@ -104,6 +112,49 @@ const stage2View = z.object({
   ),
 });
 
+const NAMES = ["applicant_1_name", "applicant_2_name"] as const satisfies readonly IntakeKey[];
+const FIGURE_INPUTS = [
+  "applicant_1_income",
+  "applicant_2_income",
+  "purchase_price",
+  "deposit",
+  "declared_debts",
+] as const satisfies readonly IntakeKey[];
+const FIGURES = [...NAMES, ...FIGURE_INPUTS];
+const CHECKED = [
+  ...NAMES,
+  "applicant_1_income",
+  "applicant_2_income",
+  "deposit",
+  "declared_debts",
+] as const;
+
+const fromCall = z
+  .array(z.enum(INTAKE_KEYS))
+  .optional()
+  .describe(
+    "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+  );
+
+interface OnFile {
+  readonly application: Application;
+  /** The keys among `keys` that came from the latest call. */
+  readonly used: (keys: readonly IntakeKey[]) => IntakeKey[];
+}
+
+/** The call's answers apply only to the file the app's call writes to. */
+function onCall(file: Application, fields: IntakeFields): OnFile {
+  const answers = file.reference === INTAKE_FILE ? fields : {};
+  return {
+    application: applyIntake(file, answers),
+    used: (keys) => capturedOf(answers, keys),
+  };
+}
+
+/** Adds `fromCall` last, and only when an answer came from the call. */
+const marked = (output: object, used: readonly IntakeKey[]) =>
+  used.length > 0 ? { ...output, fromCall: used } : output;
+
 const READ_ONLY = { readOnlyHint: true } as const;
 const NOT_FOUND = "There's no application with that id.";
 
@@ -121,8 +172,14 @@ function refuse(message: string): CallToolResult {
 const toCheckAtStage2 = (application: Application) =>
   application.toCheck.filter((item) => item.checkedAt === "credit-assessment");
 
-/** A fresh server over a fixed set of files. Nothing a tool does changes them. */
-export function buildServer(files: readonly Application[]): McpServer {
+/**
+ * A fresh server over a fixed set of files. Each call reads the latest call's answers, and
+ * nothing a tool does changes the files or the answers.
+ */
+export function buildServer(
+  files: readonly Application[],
+  answers: () => Promise<IntakeFields>,
+): McpServer {
   const server = new McpServer(
     { name: "demo-homeloan-assessment-mcp", version: "0.1.0" },
     { instructions: INSTRUCTIONS },
@@ -130,11 +187,11 @@ export function buildServer(files: readonly Application[]): McpServer {
 
   const withFile =
     <A extends { readonly applicationId: string }>(
-      use: (application: Application, args: A) => CallToolResult,
+      use: (file: OnFile, args: A) => CallToolResult,
     ) =>
-    (args: A): CallToolResult => {
-      const application = files.find((file) => file.id === args.applicationId);
-      return application ? use(application, args) : refuse(NOT_FOUND);
+    async (args: A): Promise<CallToolResult> => {
+      const file = files.find(({ id }) => id === args.applicationId);
+      return file ? use(onCall(file, await answers()), args) : refuse(NOT_FOUND);
     };
 
   server.registerTool(
@@ -152,25 +209,34 @@ export function buildServer(files: readonly Application[]): McpServer {
             applicants: z.array(z.string()),
             visit: z.number().int().min(1),
             itemsToCheck: z.number().int(),
+            fromCall,
           }),
         ),
       }),
       annotations: READ_ONLY,
     },
-    () =>
-      answer({
+    async () => {
+      const fields = await answers();
+      return answer({
         applications: files
-          .filter((application) => currentStage(application) === "credit-assessment")
-          .map((application) => ({
-            applicationId: application.id,
-            reference: application.reference,
-            applicants: viewFor("credit-assessment", application).identity.map(
-              ({ firstName, lastName }) => `${firstName} ${lastName}`,
-            ),
-            visit: visitsTo(application, "credit-assessment"),
-            itemsToCheck: toCheckAtStage2(application).length,
-          })),
-      }),
+          .filter((file) => currentStage(file) === "credit-assessment")
+          .map((file) => {
+            const { application, used } = onCall(file, fields);
+            return marked(
+              {
+                applicationId: application.id,
+                reference: application.reference,
+                applicants: viewFor("credit-assessment", application).identity.map(
+                  ({ firstName, lastName }) => `${firstName} ${lastName}`,
+                ),
+                visit: visitsTo(application, "credit-assessment"),
+                itemsToCheck: toCheckAtStage2(application).length,
+              },
+              used(NAMES),
+            );
+          }),
+      });
+    },
   );
 
   server.registerTool(
@@ -189,12 +255,13 @@ export function buildServer(files: readonly Application[]): McpServer {
         view: stage2View,
         toCheck: z.array(z.object({ id: z.string(), label: z.string(), reason: z.string() })),
         documents: z.array(document),
+        fromCall,
       }),
       annotations: READ_ONLY,
     },
-    withFile((application) => {
+    withFile(({ application, used }) => {
       const stage = currentStage(application);
-      return answer({
+      const output = {
         applicationId: application.id,
         reference: application.reference,
         stage,
@@ -207,7 +274,8 @@ export function buildServer(files: readonly Application[]): McpServer {
           reason,
         })),
         documents: documentsOnFile(application),
-      });
+      };
+      return answer(marked(output, used(INTAKE_KEYS)));
     }),
   );
 
@@ -231,30 +299,39 @@ export function buildServer(files: readonly Application[]): McpServer {
           }),
         ),
         gaps: z.array(z.string()),
+        fromCall,
       }),
       annotations: READ_ONLY,
     },
-    withFile((application) => answer(checkDocuments(application))),
+    withFile(({ application, used }) => answer(marked(checkDocuments(application), used(CHECKED)))),
   );
 
   server.registerTool(
     "indicative_serviceability",
     {
       title: "Indicative serviceability",
-      description: `The demo script's borrowing figures for the file. Nothing is calculated. ${FIGURES_AS_RETURNED} Records nothing.`,
+      description: `Indicative borrowing figures for the file, worked out from the call's answers, with the demo script's values for anything the call didn't capture. ${FIGURES_AS_RETURNED} Records nothing.`,
       inputSchema: onFile,
       outputSchema: z.object({
         label: z.literal(INDICATIVE),
-        basis: z.literal(BASIS),
+        basis: z.enum([BASIS, CALL_BASIS]),
         amountNeeded: z.number(),
         beforeAfterpay: z.number().nullable(),
         withAfterpay: z.number().nullable(),
         fallsShort: z.boolean(),
         summary: z.string(),
+        fromCall,
       }),
       annotations: READ_ONLY,
     },
-    withFile((application) => answer(indicativeServiceability(application))),
+    withFile(({ application, used }) =>
+      answer(
+        marked(
+          indicativeServiceability(application, { fromCall: used(FIGURE_INPUTS).length > 0 }),
+          used(FIGURES),
+        ),
+      ),
+    ),
   );
 
   server.registerTool(
@@ -268,10 +345,13 @@ export function buildServer(files: readonly Application[]): McpServer {
         findings: z.array(z.string()),
         recommendation: z.string(),
         recorded: z.literal(false),
+        fromCall,
       }),
       annotations: READ_ONLY,
     },
-    withFile((application) => answer(draftAssessorNotes(application))),
+    withFile(({ application, used }) =>
+      answer(marked(draftAssessorNotes(application), used(FIGURES))),
+    ),
   );
 
   server.registerTool(
@@ -286,12 +366,15 @@ export function buildServer(files: readonly Application[]): McpServer {
         text: z.string(),
         sent: z.literal(false),
         howItIsSent: z.literal(HOW_IT_IS_SENT),
+        fromCall,
       }),
       annotations: READ_ONLY,
     },
-    withFile((application) => {
+    withFile(({ application, used }) => {
       const request = draftCustomerRequest(application);
-      return request.ok ? answer(request.draft) : refuse(request.message);
+      return request.ok
+        ? answer(marked(request.draft, used(["applicant_1_name"])))
+        : refuse(request.message);
     }),
   );
 
@@ -315,32 +398,38 @@ export function buildServer(files: readonly Application[]): McpServer {
         findings: z.array(z.string()),
         stage: stageId,
         message: z.string(),
+        fromCall,
       }),
       annotations: { idempotentHint: true },
     },
-    withFile((application, { confirm }: z.output<typeof handoverInput>) => {
+    withFile(({ application, used }, { confirm }: z.output<typeof handoverInput>) => {
       const handover = handOver(application, { confirm: confirm === true });
       if (!handover.ok) {
         return refuse(handover.message);
       }
-      return answer({
+      const output = {
         applicationId: application.id,
         reference: application.reference,
         status: handover.status,
         findings: handover.findings,
         stage: currentStage(application),
         message: handover.message,
-      });
+      };
+      return answer(marked(output, used(FIGURES)));
     }),
   );
 
   return server;
 }
 
-/** The endpoint over `files`: every request needs the token, then one stateless MCP exchange. */
+/**
+ * The endpoint over `files`: every request needs the token, then one stateless MCP exchange.
+ * With no `answers`, every file keeps the script's values.
+ */
 export function mcpEndpoint(
   files: readonly Application[],
+  answers: () => Promise<IntakeFields> = () => Promise.resolve({}),
 ): (request: Request) => Promise<Response> {
-  const handler = createMcpHandler(() => buildServer(files), { responseMode: "json" });
+  const handler = createMcpHandler(() => buildServer(files, answers), { responseMode: "json" });
   return async (request) => tokenRefusal(request) ?? (await handler.fetch(request));
 }
