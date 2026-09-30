@@ -306,12 +306,12 @@ export function buildServer(files: readonly Application[]): McpServer {
     "hand_over_to_assessor",
     {
       title: "Hand over to Credit Decision",
-      description: `Hands the file from Credit Assessment to Credit Decision, where Priya Raman decides. This demo server keeps no records: the reply is the handover record, and nothing is written anywhere else. Without confirm it returns what it will record. ${CONFIRM_FIRST} It records no decision.`,
+      description: `Gets the file ready to hand over from Credit Assessment to Credit Decision. It doesn't move the file: Priya Raman hands it over in the app, and she decides. This demo server keeps no records: the reply is the handover record, and nothing is written anywhere else. Without confirm it returns what it will record. ${CONFIRM_FIRST} It records no decision.`,
       inputSchema: handoverInput,
       outputSchema: z.object({
         applicationId: z.string(),
         reference: z.string(),
-        status: z.enum(["needs-confirmation", "handed-over"]),
+        status: z.enum(["needs-confirmation", "ready-to-hand-over"]),
         findings: z.array(z.string()),
         stage: stageId,
         message: z.string(),
@@ -328,10 +328,7 @@ export function buildServer(files: readonly Application[]): McpServer {
         reference: application.reference,
         status: handover.status,
         findings: handover.findings,
-        stage:
-          handover.status === "handed-over"
-            ? currentStage({ audit: [...application.audit, ...handover.events] })
-            : currentStage(application),
+        stage: currentStage(application),
         message: handover.message,
       });
     }),

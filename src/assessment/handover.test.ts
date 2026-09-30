@@ -7,7 +7,7 @@ import { handOver } from "./handover";
 import { answered, assessed, landed, withEvents } from "./journey.fixture";
 
 function recordOf(handover: Handover): readonly AuditEvent[] {
-  if (!handover.ok || handover.status !== "handed-over") {
+  if (!handover.ok || handover.status !== "ready-to-hand-over") {
     throw new Error(`Expected a handover, got ${JSON.stringify(handover)}`);
   }
   return handover.events;
@@ -17,7 +17,7 @@ const summaries = (events: readonly AuditEvent[]) =>
   events.flatMap((event) => (event.kind === "bot-output" ? [event.summary] : []));
 
 const INSTRUCTION =
-  "On Priya Raman's instruction, the Grok Bot prepared its checks and handed Mia and Dan's file to Credit Decision, where Priya Raman decides. Indicative, not lender policy.";
+  "On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.";
 
 describe("handOver", () => {
   it("asks first, and the preview carries no record", () => {
@@ -27,15 +27,15 @@ describe("handOver", () => {
       status: "needs-confirmation",
       findings: summaries(recordOf(handOver(landed, { confirm: true }))),
       message:
-        "Nothing is handed over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.",
+        "Not ready to hand over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.",
     });
   });
 
-  it("says on confirm that nothing is stored, and that Priya records the handover in the app", () => {
+  it("says on confirm that the file is ready to hand over, and stays put until Priya hands it over in the app", () => {
     expect(handOver(landed, { confirm: true })).toMatchObject({
-      status: "handed-over",
+      status: "ready-to-hand-over",
       message:
-        "Mia and Dan's file is ready for Credit Decision with these findings. Nothing is stored here: Priya Raman records the handover in the app and decides from there.",
+        "Mia and Dan's file is ready to hand over to Credit Decision with these findings. It stays at Credit Assessment until Priya Raman hands it over in the app. Nothing is stored here.",
     });
   });
 

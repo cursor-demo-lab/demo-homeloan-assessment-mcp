@@ -17,7 +17,7 @@ export type Handover =
     }
   | {
       readonly ok: true;
-      readonly status: "handed-over";
+      readonly status: "ready-to-hand-over";
       readonly findings: readonly string[];
       readonly events: readonly [AuditEvent, ...AuditEvent[]];
       readonly message: string;
@@ -45,7 +45,7 @@ export function handOver(application: Application, { confirm }: { confirm: boole
     at: storyTimeAfter(application, 1),
     kind: "bot-output",
     stage: "credit-assessment",
-    summary: `On ${ASSESSOR}'s instruction, the Grok Bot prepared its checks and handed ${names}'s file to Credit Decision, where ${ASSESSOR} decides. ${INDICATIVE}.`,
+    summary: `On ${ASSESSOR}'s instruction, the Grok Bot prepared its checks for the handover of ${names}'s file to Credit Decision. ${ASSESSOR} hands it over in the app and decides. ${INDICATIVE}.`,
   };
   const events = [
     instruction,
@@ -56,15 +56,15 @@ export function handOver(application: Application, { confirm }: { confirm: boole
   return confirm
     ? {
         ok: true,
-        status: "handed-over",
+        status: "ready-to-hand-over",
         findings,
         events,
-        message: `${names}'s file is ready for Credit Decision with these findings. Nothing is stored here: ${ASSESSOR} records the handover in the app and decides from there.`,
+        message: `${names}'s file is ready to hand over to Credit Decision with these findings. It stays at Credit Assessment until ${ASSESSOR} hands it over in the app. Nothing is stored here.`,
       }
     : {
         ok: true,
         status: "needs-confirmation",
         findings,
-        message: `Nothing is handed over until ${ASSESSOR} confirms. These are the findings the handover of ${names}'s file to Credit Decision will carry.`,
+        message: `Not ready to hand over until ${ASSESSOR} confirms. These are the findings the handover of ${names}'s file to Credit Decision will carry.`,
       };
 }
