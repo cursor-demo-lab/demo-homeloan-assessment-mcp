@@ -305,7 +305,7 @@ describe("every tool on Mia and Dan's file", () => {
         {
           applicationId: ID,
           reference: landed.reference,
-          applicants: ["Mia Castellano", "Dan Harlow"],
+          applicants: ["Mia Castellano", "Dan Okafor"],
           visit: 1,
           itemsToCheck: 7,
         },

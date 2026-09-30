@@ -1,7 +1,7 @@
 # demo-homeloan-assessment-mcp
 
 A demo MCP server for the Credit Assessment stage of a home loan. It serves seven
-tools over one made-up file, Mia Castellano and Dan Harlow's application, at
+tools over one made-up file, Mia Castellano and Dan Okafor's application, at
 `/api/mcp`. It is for demos only. It keeps no state: every call reads the same
 fixture, and nothing a tool does is written anywhere.
 

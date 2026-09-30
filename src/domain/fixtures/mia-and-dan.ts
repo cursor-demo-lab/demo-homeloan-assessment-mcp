@@ -63,9 +63,9 @@ export const DAN: Applicant = {
   id: applicantId("applicant-dan"),
   role: "co-applicant",
   firstName: "Dan",
-  lastName: "Harlow",
+  lastName: "Okafor",
   mobile: "0491 570 157",
-  email: "dan.harlow@example.com",
+  email: "dan.okafor@example.com",
   employment: {
     status: "stated",
     source: "voice-call",
