@@ -348,11 +348,16 @@ describe("every tool on Mia and Dan's file", () => {
 
   it("previews the handover, returns the record on confirm, and writes nothing", async () => {
     const client = await connect();
+    const file = { applicationId: ID, reference: landed.reference };
     const preview = await answer(client, "hand_over_to_assessor");
-    expect(preview).toMatchObject({ status: "needs-confirmation", stage: "credit-assessment" });
+    expect(preview).toMatchObject({
+      ...file,
+      status: "needs-confirmation",
+      stage: "credit-assessment",
+    });
 
     const handedOver = await answer(client, "hand_over_to_assessor", CONFIRM);
-    expect(handedOver).toMatchObject({ status: "handed-over", stage: "credit-decision" });
+    expect(handedOver).toMatchObject({ ...file, status: "handed-over", stage: "credit-decision" });
     const findings = handedOver["findings"] as readonly string[];
     const notes = draftAssessorNotes(landed);
     expect(findings[0]).toMatch(/^On Priya Raman's instruction, /u);

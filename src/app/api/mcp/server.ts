@@ -309,6 +309,8 @@ export function buildServer(files: readonly Application[]): McpServer {
       description: `Hands the file from Credit Assessment to Credit Decision, where Priya Raman decides. This demo server keeps no records: the reply is the handover record, and nothing is written anywhere else. Without confirm it returns what it will record. ${CONFIRM_FIRST} It records no decision.`,
       inputSchema: handoverInput,
       outputSchema: z.object({
+        applicationId: z.string(),
+        reference: z.string(),
         status: z.enum(["needs-confirmation", "handed-over"]),
         findings: z.array(z.string()),
         stage: stageId,
@@ -322,6 +324,8 @@ export function buildServer(files: readonly Application[]): McpServer {
         return refuse(handover.message);
       }
       return answer({
+        applicationId: application.id,
+        reference: application.reference,
         status: handover.status,
         findings: handover.findings,
         stage:
