@@ -9,13 +9,12 @@ Production: `https://demo-homeloan-assessment-mcp.vercel.app/api/mcp`
 
 ## The token
 
-Every request needs `Authorization: Bearer <token>`, including `initialize` and
-`tools/list`.
+Every request needs `Authorization: Bearer <your-demo-token>`, including `initialize`
+and `tools/list`.
 
-- The token is `DEMO_ONLY_TOKEN` in `src/app/api/mcp/auth.ts`, a random 32-byte hex
-  value. It is in the source on purpose and guards nothing but demo data.
-- Set `DEMO_MCP_TOKEN` to use a different token. The server then accepts that value
-  and refuses the hardcoded one. An empty `DEMO_MCP_TOKEN` counts as unset.
+- The server accepts only the value of `DEMO_MCP_TOKEN`. There is no token in the
+  source.
+- If `DEMO_MCP_TOKEN` is unset or empty, every request gets `401`.
 - A missing or wrong token gets `401` with `WWW-Authenticate: Bearer` and the body
   `{"error":"Unauthorized."}`. No tool names or schemas come back.
 
@@ -44,11 +43,11 @@ Tested on Node 22 with pnpm 10.
 
 ```bash
 pnpm install
-pnpm dev
+DEMO_MCP_TOKEN='<your-demo-token>' pnpm dev
 ```
 
 ```bash
-TOKEN=2381f05ddc3a010030d70c6b310510cab10ba23953da044b9ee39758b203ea82
+TOKEN='<your-demo-token>'
 
 # 401, WWW-Authenticate: Bearer, no tool list
 curl -i -X POST http://localhost:3000/api/mcp \
@@ -72,8 +71,8 @@ curl -X POST http://localhost:3000/api/mcp \
    `cursor-demo-lab/demo-homeloan-assessment-mcp`.
 2. Name the project `demo-homeloan-assessment-mcp`. Vercel detects Next.js and pnpm;
    keep the default build settings.
-3. Optionally, add `DEMO_MCP_TOKEN` under **Environment Variables** for Production.
-   Leave it out to use the hardcoded demo token.
+3. Add `DEMO_MCP_TOKEN` under **Environment Variables** for Production. Without it,
+   every request gets `401`.
 4. Deploy. The server is at
    `https://demo-homeloan-assessment-mcp.vercel.app/api/mcp`.
 
@@ -90,11 +89,11 @@ pnpm build
 ```
 
 `pnpm assessment:check` drives a deployment through xAI's MCP client. It needs
-`XAI_API_KEY`, and uses `DEMO_MCP_TOKEN` if set, else the demo token.
+`XAI_API_KEY` and `DEMO_MCP_TOKEN`, the deployment's token.
 
 ```bash
-XAI_API_KEY=... pnpm assessment:check
-XAI_API_KEY=... pnpm assessment:check --url https://<another-host>/api/mcp
+XAI_API_KEY=... DEMO_MCP_TOKEN='<your-demo-token>' pnpm assessment:check
+XAI_API_KEY=... DEMO_MCP_TOKEN='<your-demo-token>' pnpm assessment:check --url https://<another-host>/api/mcp
 ```
 
 `--url` must be `https` and reachable from xAI, so a preview behind Vercel's login
@@ -112,7 +111,7 @@ fail. The xAI key and the token are never printed.
   "type": "mcp",
   "server_url": "https://demo-homeloan-assessment-mcp.vercel.app/api/mcp",
   "server_label": "assessment",
-  "headers": { "Authorization": "Bearer <token>" }
+  "headers": { "Authorization": "Bearer <your-demo-token>" }
 }
 ```
 

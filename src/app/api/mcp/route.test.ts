@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import type { VersionNegotiationMode } from "@modelcontextprotocol/client";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -12,11 +13,11 @@ import type { Application } from "@/domain/application";
 import { SCRIPT_FIGURES } from "@/domain/figures";
 import { DAN, MIA } from "@/domain/fixtures/mia-and-dan";
 import { formatAud } from "@/domain/money";
-import { DEMO_ONLY_TOKEN } from "./auth";
 import { DELETE, GET, POST } from "./route";
 import { mcpEndpoint } from "./server";
 
 const ENDPOINT = "http://localhost/api/mcp";
+const TOKEN = randomBytes(32).toString("hex");
 const ID = landed.id;
 const MIA_AND_DAN = { applicationId: ID };
 const CONFIRM = { ...MIA_AND_DAN, confirm: true };
@@ -37,7 +38,7 @@ type Endpoint = (request: Request) => Promise<Response>;
 const clients: Client[] = [];
 
 async function connect({
-  headers = { Authorization: `Bearer ${DEMO_ONLY_TOKEN}` },
+  headers = { Authorization: `Bearer ${TOKEN}` },
   mode = "legacy",
   endpoint = POST,
 }: {
@@ -166,11 +167,11 @@ const flipLast = (token: string) => `${token.slice(0, -1)}${token.endsWith("0") 
 const MISSING: readonly (readonly [string, string | undefined])[] = [
   ["no Authorization header", undefined],
   ["an empty bearer token", "Bearer "],
-  ["the token under another scheme", `Basic ${DEMO_ONLY_TOKEN}`],
+  ["the token under another scheme", `Basic ${TOKEN}`],
 ];
 const WRONG: readonly (readonly [string, string])[] = [
-  ["a wrong token of the same length", `Bearer ${flipLast(DEMO_ONLY_TOKEN)}`],
-  ["the token with more on the end", `Bearer ${DEMO_ONLY_TOKEN}0`],
+  ["a wrong token of the same length", `Bearer ${flipLast(TOKEN)}`],
+  ["the token with more on the end", `Bearer ${TOKEN}0`],
   ["a short wrong token", "Bearer 0"],
 ];
 const cases = (list: readonly (readonly [string, string | undefined])[]) =>
@@ -179,7 +180,7 @@ const cases = (list: readonly (readonly [string, string | undefined])[]) =>
   );
 
 beforeEach(() => {
-  vi.stubEnv("DEMO_MCP_TOKEN", "");
+  vi.stubEnv("DEMO_MCP_TOKEN", TOKEN);
 });
 
 afterEach(async () => {
@@ -188,10 +189,6 @@ afterEach(async () => {
 });
 
 describe("the token check", () => {
-  it("hardcodes a demo token of 32 random bytes in hex", () => {
-    expect(DEMO_ONLY_TOKEN).toMatch(/^[\da-f]{64}$/u);
-  });
-
   it.each(cases(MISSING))(
     "refuses %s with a missing token (%s): 401, a Bearer challenge, and no tool list",
     async (method, _label, authorization) => {
@@ -212,13 +209,13 @@ describe("the token check", () => {
 
   it.each([
     ["no token", {}],
-    ["a wrong token", { Authorization: `Bearer ${flipLast(DEMO_ONLY_TOKEN)}` }],
+    ["a wrong token", { Authorization: `Bearer ${flipLast(TOKEN)}` }],
   ])("stops an MCP client connecting with %s", async (_label, headers) => {
     await expect(connect({ headers })).rejects.toThrow(/401|unauthori[sz]ed/iu);
   });
 
   it("serves the demo token, with Bearer in any case", async () => {
-    const client = await connect({ headers: { Authorization: `bEARER ${DEMO_ONLY_TOKEN}` } });
+    const client = await connect({ headers: { Authorization: `bEARER ${TOKEN}` } });
     const { tools } = await client.listTools();
     expect(tools).toHaveLength(TOOLS.length);
   });
@@ -230,7 +227,7 @@ describe("the token check", () => {
     const { tools } = await client.listTools();
     expect(tools.map((tool) => tool.name)).toStrictEqual(TOOLS);
     const refusals = await Promise.all(
-      METHODS.map(async (method) => refusalOf(await rpc(method, `Bearer ${DEMO_ONLY_TOKEN}`))),
+      METHODS.map(async (method) => refusalOf(await rpc(method, `Bearer ${TOKEN}`))),
     );
     expect(refusals).toStrictEqual(METHODS.map(() => REFUSED));
   });
@@ -238,12 +235,12 @@ describe("the token check", () => {
   it.each([
     ["unset", undefined],
     ["empty", ""],
-  ])("keeps the demo token when DEMO_MCP_TOKEN is %s", async (_label, value) => {
+  ])("refuses every token when DEMO_MCP_TOKEN is %s", async (_label, value) => {
     vi.stubEnv("DEMO_MCP_TOKEN", value);
-    const client = await connect();
-    const { tools } = await client.listTools();
-    expect(tools.map((tool) => tool.name)).toStrictEqual(TOOLS);
-    await expect(refusalOf(await rpc("tools/list", "Bearer "))).resolves.toStrictEqual(REFUSED);
+    await expect(connect()).rejects.toThrow(/401|unauthori[sz]ed/iu);
+    await expect(refusalOf(await rpc("tools/list", `Bearer ${TOKEN}`))).resolves.toStrictEqual(
+      REFUSED,
+    );
   });
 
   it.each([
@@ -254,7 +251,7 @@ describe("the token check", () => {
       route(
         new Request(ENDPOINT, { method, headers: { Accept: "text/event-stream", ...headers } }),
       );
-    const served = await request({ Authorization: `Bearer ${DEMO_ONLY_TOKEN}` });
+    const served = await request({ Authorization: `Bearer ${TOKEN}` });
     expect(served.status).toBe(405);
     await expect(refusalOf(await request({}))).resolves.toStrictEqual(REFUSED);
   });

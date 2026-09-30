@@ -2,7 +2,6 @@ import { randomBytes } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { z } from "zod";
-import { DEMO_ONLY_TOKEN } from "../src/app/api/mcp/auth";
 
 const DEPLOYMENT_URL = "https://demo-homeloan-assessment-mcp.vercel.app/api/mcp";
 const XAI_RESPONSES_URL = "https://api.x.ai/v1/responses";
@@ -281,8 +280,11 @@ async function main(): Promise<number> {
     console.error("Set XAI_API_KEY first.");
     return 2;
   }
-  const override = process.env["DEMO_MCP_TOKEN"] ?? "";
-  const token = override === "" ? DEMO_ONLY_TOKEN : override;
+  const token = process.env["DEMO_MCP_TOKEN"] ?? "";
+  if (token === "") {
+    console.error("Set DEMO_MCP_TOKEN to the deployment's token first.");
+    return 2;
+  }
 
   process.stdout.write(`Checking ${url.origin}${url.pathname} through xAI's MCP client\n`);
   const server: McpServer = { url: url.href, headers: { Authorization: `Bearer ${token}` } };
