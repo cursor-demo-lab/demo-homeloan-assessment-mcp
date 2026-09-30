@@ -27,7 +27,15 @@ describe("handOver", () => {
       status: "needs-confirmation",
       findings: summaries(recordOf(handOver(landed, { confirm: true }))),
       message:
-        "Nothing is handed over until Priya Raman confirms. Then I'll record these findings and hand Mia and Dan's file to Credit Decision.",
+        "Nothing is handed over until Priya Raman confirms. These are the findings the handover of Mia and Dan's file to Credit Decision will carry.",
+    });
+  });
+
+  it("says on confirm that nothing is stored, and that Priya records the handover in the app", () => {
+    expect(handOver(landed, { confirm: true })).toMatchObject({
+      status: "handed-over",
+      message:
+        "Mia and Dan's file is ready for Credit Decision with these findings. Nothing is stored here: Priya Raman records the handover in the app and decides from there.",
     });
   });
 

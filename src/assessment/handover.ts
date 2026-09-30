@@ -58,12 +58,12 @@ export function handOver(application: Application, { confirm }: { confirm: boole
         status: "handed-over",
         findings,
         events,
-        message: `Recorded the findings and handed ${names}'s file to Credit Decision. ${ASSESSOR} decides from here.`,
+        message: `${names}'s file is ready for Credit Decision with these findings. Nothing is stored here: ${ASSESSOR} records the handover in the app and decides from there.`,
       }
     : {
         ok: true,
         status: "needs-confirmation",
         findings,
-        message: `Nothing is handed over until ${ASSESSOR} confirms. Then I'll record these findings and hand ${names}'s file to Credit Decision.`,
+        message: `Nothing is handed over until ${ASSESSOR} confirms. These are the findings the handover of ${names}'s file to Credit Decision will carry.`,
       };
 }
