@@ -196,6 +196,48 @@ describe("after a call with different answers", () => {
     await client.close();
   });
 
+  it("re-checks the call's answers after the reply, and says which came from the call", async () => {
+    await post(VARIED_ANSWERS);
+    const { client, call } = await connect(landed);
+    const recheck = await call("recheck_after_reply", { ...APPLICATION, customerReplied: true });
+    expect(recheck).toMatchObject({
+      visit: 2,
+      reply:
+        "Sofia replied to the 'more information needed' text. She and Tom have closed the Afterpay account, and she sent the closure letter.",
+      gaps: [],
+      serviceability: {
+        basis:
+          "Worked out from the call's answers, with the demo script's values for anything the call didn't capture.",
+        amountNeeded: 900_000,
+        fallsShort: false,
+      },
+      findings: [
+        "Re-checked Sofia and Tom's documents after the request for more information. The Afterpay account is closed, and nothing else has changed.",
+        "Without the Afterpay commitment, the indicative borrowing no longer falls short of what Sofia and Tom need (about A$900,000).",
+      ],
+      recommendation:
+        "Recommendation: approve. The re-check passes: the undisclosed account is closed, and the borrowing covers what Sofia and Tom need.",
+      fromCall: FIGURES,
+    });
+    expect(recheck["message"]).toMatch(/^Sofia and Tom's file is re-checked\./u);
+    expect(JSON.stringify(recheck)).not.toMatch(/\b(?:Mia|Dan|Castellano|Okafor)\b|790,000/u);
+    await client.close();
+  });
+
+  it("recommends a decline on the re-check tool too when the borrowing still falls short", async () => {
+    await post({ applicant_2_income: "A$60,000 a year" });
+    const { client, call } = await connect(landed);
+    await expect(
+      call("recheck_after_reply", { ...APPLICATION, customerReplied: true }),
+    ).resolves.toMatchObject({
+      serviceability: { fallsShort: true },
+      recommendation:
+        "Recommendation: decline. The undisclosed account is closed, but the indicative borrowing still falls short of what Mia and Dan need.",
+      fromCall: ["applicant_2_income"],
+    });
+    await client.close();
+  });
+
   it("keeps the script's basis when only names came from the call", async () => {
     await post({ applicant_1_name: "Sofia Reyes" });
     const { client, call } = await connect(landed);

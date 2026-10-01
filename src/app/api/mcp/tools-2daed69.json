@@ -1,0 +1,870 @@
+[
+  {
+    "name": "list_applications",
+    "title": "Files at Credit Assessment",
+    "description": "Lists the files now at Credit Assessment, with the visit and how many items each has to check. Records nothing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "applications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "applicationId": {
+                "type": "string"
+              },
+              "reference": {
+                "type": "string"
+              },
+              "applicants": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "visit": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "itemsToCheck": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "fromCall": {
+                "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "applicant_1_name",
+                    "applicant_1_employment",
+                    "applicant_1_income",
+                    "applicant_2_name",
+                    "applicant_2_employment",
+                    "applicant_2_income",
+                    "target_area",
+                    "purchase_price",
+                    "deposit",
+                    "first_home",
+                    "declared_debts"
+                  ]
+                }
+              }
+            },
+            "required": ["applicationId", "reference", "applicants", "visit", "itemsToCheck"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["applications"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "get_application",
+    "title": "Read a file",
+    "description": "Reads one file as Credit Assessment sees it: the applicants, income, commitments, property goal and consent, what's to check, and the documents on file. It works at any stage, so it also says where a file has gone. It never shows contact details or the appointment. Records nothing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file id, for example \"app-mia-dan\""
+        }
+      },
+      "required": ["applicationId"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "voice-intake",
+            "credit-assessment",
+            "credit-decision",
+            "fulfilment",
+            "fulfilment-check",
+            "settlement"
+          ]
+        },
+        "visit": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "canWrite": {
+          "type": "boolean"
+        },
+        "view": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "identity": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["primary", "co-applicant"]
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "identity": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "enum": ["pending", "verified"]
+                      },
+                      "method": {
+                        "type": "string"
+                      },
+                      "at": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["status"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["id", "role", "firstName", "lastName", "identity"],
+                "additionalProperties": false
+              }
+            },
+            "household": {
+              "type": "object",
+              "properties": {
+                "relationship": {
+                  "type": "string",
+                  "const": "partners"
+                },
+                "dependants": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": ["relationship", "dependants"],
+              "additionalProperties": false
+            },
+            "income": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "employment": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "enum": ["stated", "verified"]
+                      },
+                      "value": {
+                        "type": "object",
+                        "properties": {
+                          "basis": {
+                            "type": "string"
+                          },
+                          "occupation": {
+                            "type": "string"
+                          },
+                          "employer": {
+                            "type": "string"
+                          },
+                          "yearsInRole": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["basis", "occupation", "employer", "yearsInRole"],
+                        "additionalProperties": false
+                      },
+                      "source": {
+                        "type": "string",
+                        "enum": ["voice-call", "document-upload", "bot-check"]
+                      },
+                      "verifiedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["status", "value", "source"],
+                    "additionalProperties": false
+                  },
+                  "annualIncome": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "enum": ["stated", "verified"]
+                      },
+                      "value": {
+                        "type": "number"
+                      },
+                      "source": {
+                        "type": "string",
+                        "enum": ["voice-call", "document-upload", "bot-check"]
+                      },
+                      "verifiedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["status", "value", "source"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["id", "employment", "annualIncome"],
+                "additionalProperties": false
+              }
+            },
+            "commitments": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["stated", "verified"]
+                },
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "limitOrBalance": {
+                        "type": "number"
+                      },
+                      "monthlyRepayment": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["kind", "description", "limitOrBalance", "monthlyRepayment"],
+                    "additionalProperties": false
+                  }
+                },
+                "source": {
+                  "type": "string",
+                  "enum": ["voice-call", "document-upload", "bot-check"]
+                },
+                "verifiedAt": {
+                  "type": "string"
+                }
+              },
+              "required": ["status", "value", "source"],
+              "additionalProperties": false
+            },
+            "property-goal": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": "string",
+                  "const": "owner-occupier"
+                },
+                "firstHomeBuyers": {
+                  "type": "boolean"
+                },
+                "targetArea": {
+                  "type": "string"
+                },
+                "purchasePrice": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["stated", "verified"]
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "source": {
+                      "type": "string",
+                      "enum": ["voice-call", "document-upload", "bot-check"]
+                    },
+                    "verifiedAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["status", "value", "source"],
+                  "additionalProperties": false
+                },
+                "deposit": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["stated", "verified"]
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "source": {
+                      "type": "string",
+                      "enum": ["voice-call", "document-upload", "bot-check"]
+                    },
+                    "verifiedAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["status", "value", "source"],
+                  "additionalProperties": false
+                },
+                "loanAmountSought": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "purpose",
+                "firstHomeBuyers",
+                "targetArea",
+                "purchasePrice",
+                "deposit",
+                "loanAmountSought"
+              ],
+              "additionalProperties": false
+            },
+            "consent": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "consent": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "enum": ["pending", "given"]
+                      },
+                      "scope": {
+                        "type": "string"
+                      },
+                      "channel": {
+                        "type": "string"
+                      },
+                      "at": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["status"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["id", "consent"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "id",
+            "identity",
+            "household",
+            "income",
+            "commitments",
+            "property-goal",
+            "consent"
+          ],
+          "additionalProperties": false
+        },
+        "toCheck": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "label", "reason"],
+            "additionalProperties": false
+          }
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "shows": {
+                "type": "string"
+              },
+              "verifies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["id", "title", "shows", "verifies"],
+            "additionalProperties": false
+          }
+        },
+        "fromCall": {
+          "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "applicant_1_name",
+              "applicant_1_employment",
+              "applicant_1_income",
+              "applicant_2_name",
+              "applicant_2_employment",
+              "applicant_2_income",
+              "target_area",
+              "purchase_price",
+              "deposit",
+              "first_home",
+              "declared_debts"
+            ]
+          }
+        }
+      },
+      "required": [
+        "applicationId",
+        "reference",
+        "stage",
+        "visit",
+        "canWrite",
+        "view",
+        "toCheck",
+        "documents"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "check_documents",
+    "title": "Check the documents",
+    "description": "Cross-checks what the call stated against the documents on file, item by item, and lists the open gaps. Records nothing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file id, for example \"app-mia-dan\""
+        }
+      },
+      "required": ["applicationId"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "visit": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "checkId": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "stated": {
+                "type": ["string", "null"]
+              },
+              "onDocuments": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "result": {
+                "type": "string",
+                "enum": ["matches", "shown-on-documents", "not-on-call", "closed"]
+              }
+            },
+            "required": ["checkId", "label", "stated", "onDocuments", "evidence", "result"],
+            "additionalProperties": false
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fromCall": {
+          "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "applicant_1_name",
+              "applicant_1_employment",
+              "applicant_1_income",
+              "applicant_2_name",
+              "applicant_2_employment",
+              "applicant_2_income",
+              "target_area",
+              "purchase_price",
+              "deposit",
+              "first_home",
+              "declared_debts"
+            ]
+          }
+        }
+      },
+      "required": ["visit", "checks", "gaps"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "indicative_serviceability",
+    "title": "Indicative serviceability",
+    "description": "Indicative borrowing figures for the file, worked out from the call's answers, with the demo script's values for anything the call didn't capture. Quote figures only as a tool returns them, and put \"Indicative, not lender policy\" in the same reply as any figure. Keep that label exactly as the tools return it, word for word. Records nothing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file id, for example \"app-mia-dan\""
+        }
+      },
+      "required": ["applicationId"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "const": "Indicative, not lender policy"
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "The demo script's figures. Nothing is calculated.",
+            "Worked out from the call's answers, with the demo script's values for anything the call didn't capture."
+          ]
+        },
+        "amountNeeded": {
+          "type": "number"
+        },
+        "beforeAfterpay": {
+          "type": ["number", "null"]
+        },
+        "withAfterpay": {
+          "type": ["number", "null"]
+        },
+        "fallsShort": {
+          "type": "boolean"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "fromCall": {
+          "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "applicant_1_name",
+              "applicant_1_employment",
+              "applicant_1_income",
+              "applicant_2_name",
+              "applicant_2_employment",
+              "applicant_2_income",
+              "target_area",
+              "purchase_price",
+              "deposit",
+              "first_home",
+              "declared_debts"
+            ]
+          }
+        }
+      },
+      "required": [
+        "label",
+        "basis",
+        "amountNeeded",
+        "beforeAfterpay",
+        "withAfterpay",
+        "fallsShort",
+        "summary"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "draft_assessor_notes",
+    "title": "Draft the assessor's notes",
+    "description": "Drafts Priya's notes: the findings hand_over_to_assessor will record, word for word, and the bot's recommendation. Priya decides. Never say or imply that a loan is or will be approved. Quote figures only as a tool returns them, and put \"Indicative, not lender policy\" in the same reply as any figure. Keep that label exactly as the tools return it, word for word. Records nothing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file id, for example \"app-mia-dan\""
+        }
+      },
+      "required": ["applicationId"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "const": "Indicative, not lender policy"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommendation": {
+          "type": "string"
+        },
+        "recorded": {
+          "type": "boolean",
+          "const": false
+        },
+        "fromCall": {
+          "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "applicant_1_name",
+              "applicant_1_employment",
+              "applicant_1_income",
+              "applicant_2_name",
+              "applicant_2_employment",
+              "applicant_2_income",
+              "target_area",
+              "purchase_price",
+              "deposit",
+              "first_home",
+              "declared_debts"
+            ]
+          }
+        }
+      },
+      "required": ["label", "findings", "recommendation", "recorded"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "draft_customer_request",
+    "title": "Draft a text to the customer",
+    "description": "Drafts a text to the customer asking about the gap the documents show. It is never sent from here. It refuses when nothing is missing. Records nothing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file id, for example \"app-mia-dan\""
+        }
+      },
+      "required": ["applicationId"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "sent": {
+          "type": "boolean",
+          "const": false
+        },
+        "howItIsSent": {
+          "type": "string",
+          "const": "Nothing is sent from here. Priya's 'Ask for more info' decision sends the 'more information needed' text."
+        },
+        "fromCall": {
+          "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "applicant_1_name",
+              "applicant_1_employment",
+              "applicant_1_income",
+              "applicant_2_name",
+              "applicant_2_employment",
+              "applicant_2_income",
+              "target_area",
+              "purchase_price",
+              "deposit",
+              "first_home",
+              "declared_debts"
+            ]
+          }
+        }
+      },
+      "required": ["to", "text", "sent", "howItIsSent"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "hand_over_to_assessor",
+    "title": "Hand over to Credit Decision",
+    "description": "Gets the file ready to hand over from Credit Assessment to Credit Decision. It doesn't move the file: Priya Raman hands it over in the app, and she decides. This demo server keeps no records: the reply is the handover record, and nothing is written anywhere else. Without confirm it returns what it will record. Handing over always takes two messages from Priya. When she first asks you to hand a file over, call hand_over_to_assessor without confirm, show her what it will record, and ask her to confirm; do not set confirm yet, even though she asked. Set confirm to true only when her next message confirms. It records no decision.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file id, for example \"app-mia-dan\""
+        },
+        "confirm": {
+          "description": "true only when Priya confirms, in her message after the preview",
+          "type": "boolean"
+        }
+      },
+      "required": ["applicationId"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["needs-confirmation", "ready-to-hand-over"]
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "voice-intake",
+            "credit-assessment",
+            "credit-decision",
+            "fulfilment",
+            "fulfilment-check",
+            "settlement"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "fromCall": {
+          "description": "The intake answers this reply used that came from the latest call. Everything else is the demo script's.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "applicant_1_name",
+              "applicant_1_employment",
+              "applicant_1_income",
+              "applicant_2_name",
+              "applicant_2_employment",
+              "applicant_2_income",
+              "target_area",
+              "purchase_price",
+              "deposit",
+              "first_home",
+              "declared_debts"
+            ]
+          }
+        }
+      },
+      "required": ["applicationId", "reference", "status", "findings", "stage", "message"],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "idempotentHint": true
+    }
+  }
+]

@@ -7,6 +7,7 @@ import { RECOMMENDATION_PREFIX } from "@/assessment/credit-assessment-bot";
 import { documentsOnFile } from "@/assessment/documents";
 import { draftAssessorNotes, draftCustomerRequest } from "@/assessment/drafts";
 import { answered, assessed, landed, reassessed } from "@/assessment/journey.fixture";
+import { customerReply } from "@/assessment/reply";
 import { indicativeServiceability } from "@/assessment/serviceability";
 import { viewFor } from "@/domain/access";
 import type { Application } from "@/domain/application";
@@ -15,12 +16,14 @@ import { DAN, MIA } from "@/domain/fixtures/mia-and-dan";
 import { formatAud } from "@/domain/money";
 import { DELETE, GET, POST } from "./route";
 import { mcpEndpoint } from "./server";
+import TOOLS_AT_2DAED69 from "./tools-2daed69.json";
 
 const ENDPOINT = "http://localhost/api/mcp";
 const TOKEN = randomBytes(32).toString("hex");
 const ID = landed.id;
 const MIA_AND_DAN = { applicationId: ID };
 const CONFIRM = { ...MIA_AND_DAN, confirm: true };
+const REPLIED = { ...MIA_AND_DAN, customerReplied: true };
 const NOTHING = {};
 const TOOLS = [
   "list_applications",
@@ -30,7 +33,13 @@ const TOOLS = [
   "draft_assessor_notes",
   "draft_customer_request",
   "hand_over_to_assessor",
+  "recheck_after_reply",
 ];
+const ARGS: Readonly<Record<string, Output>> = {
+  list_applications: NOTHING,
+  recheck_after_reply: REPLIED,
+};
+const argsFor = (name: string) => ARGS[name] ?? MIA_AND_DAN;
 
 type Output = Record<string, unknown>;
 type Endpoint = (request: Request) => Promise<Response>;
@@ -89,7 +98,7 @@ async function says(client: Client, name: string, args: Output): Promise<Said> {
 }
 
 const EVERY_CALL: readonly (readonly [string, Output])[] = [
-  ...TOOLS.map((name) => [name, name === "list_applications" ? NOTHING : MIA_AND_DAN] as const),
+  ...TOOLS.map((name) => [name, argsFor(name)] as const),
   ["hand_over_to_assessor", CONFIRM],
 ];
 
@@ -259,7 +268,7 @@ describe("the token check", () => {
 
 describe("tools/list", () => {
   it.each<VersionNegotiationMode>(["legacy", "auto"])(
-    "lists the seven tools, each with an input and output schema (%s negotiation)",
+    "lists the eight tools, each with an input and output schema (%s negotiation)",
     async (mode) => {
       const client = await connect({ mode });
       expect(client.getProtocolEra()).toBe(mode === "auto" ? "modern" : "legacy");
@@ -274,6 +283,12 @@ describe("tools/list", () => {
       }
     },
   );
+
+  it("lists the seven tools it had before the re-check exactly as 2daed69 did, byte for byte", async () => {
+    const client = await connect();
+    const { tools } = await client.listTools();
+    expect(JSON.stringify(tools.slice(0, 7))).toBe(JSON.stringify(TOOLS_AT_2DAED69));
+  });
 
   it("names itself and states the rules", async () => {
     const client = await connect();
@@ -380,9 +395,9 @@ describe("refusals", () => {
     "%s refuses an unknown id",
     async (name) => {
       const client = await connect();
-      await expect(refusal(client, name, { applicationId: "app-nobody" })).resolves.toStrictEqual(
-        said("There's no application with that id."),
-      );
+      await expect(
+        refusal(client, name, { ...argsFor(name), applicationId: "app-nobody" }),
+      ).resolves.toStrictEqual(said("There's no application with that id."));
     },
   );
 
@@ -441,6 +456,109 @@ describe("both visits", () => {
   });
 });
 
+describe("the re-check after the customer's reply", () => {
+  it("re-checks the file as it stands after Mia's reply, without storing anything", async () => {
+    const client = await connect();
+    const { checks, gaps } = checkDocuments(answered);
+    const { findings, recommendation } = draftAssessorNotes(answered);
+    await expect(answer(client, "recheck_after_reply", REPLIED)).resolves.toStrictEqual({
+      applicationId: ID,
+      reference: landed.reference,
+      visit: 2,
+      reply: customerReply(answered),
+      documents: documentsOnFile(answered),
+      checks,
+      gaps,
+      serviceability: indicativeServiceability(answered),
+      findings,
+      recommendation,
+      recorded: false,
+      message:
+        'Mia and Dan\'s file is re-checked. It stays at Credit Assessment until Priya Raman hands it over in the app with "Hand over to Credit Decision", which records these findings, and she decides. Nothing is stored here.',
+    });
+  });
+
+  it("finds the Afterpay account closed with the letter on file, nothing missing, and the borrowing no longer short", async () => {
+    const output = await answer(await connect(), "recheck_after_reply", REPLIED);
+    expect(output["reply"]).toBe(
+      "Mia replied to the 'more information needed' text. She and Dan have closed the Afterpay account, and she sent the closure letter.",
+    );
+    expect(output["documents"]).toContainEqual(
+      expect.objectContaining({ title: "Afterpay closure letter" }),
+    );
+    expect(output["checks"]).toContainEqual(expect.objectContaining({ result: "closed" }));
+    expect(output["gaps"]).toStrictEqual([]);
+    expect(output["serviceability"]).toMatchObject({
+      beforeAfterpay: null,
+      withAfterpay: null,
+      fallsShort: false,
+    });
+    expect(output["recommendation"]).toMatch(
+      new RegExp(`^${RECOMMENDATION_PREFIX}approve\\.`, "u"),
+    );
+  });
+
+  it("drafts the findings the handover carries on visit 2, word for word", async () => {
+    const output = await answer(await connect(), "recheck_after_reply", REPLIED);
+    const handedOver = await answer(await onFile(answered), "hand_over_to_assessor", CONFIRM);
+    expect([...(output["findings"] as string[]), output["recommendation"]]).toStrictEqual(
+      (handedOver["findings"] as string[]).slice(1),
+    );
+  });
+
+  it("leaves every other tool reading the file as the call landed it", async () => {
+    const client = await connect();
+    await answer(client, "recheck_after_reply", REPLIED);
+    await expect(answer(client, "list_applications", NOTHING)).resolves.toMatchObject({
+      applications: [{ applicationId: ID, visit: 1 }],
+    });
+    await expect(answer(client, "check_documents")).resolves.toStrictEqual(checkDocuments(landed));
+    await expect(answer(client, "draft_assessor_notes")).resolves.toStrictEqual(
+      draftAssessorNotes(landed),
+    );
+  });
+
+  it.each([
+    ["without customerReplied", MIA_AND_DAN],
+    ["with customerReplied false", { ...MIA_AND_DAN, customerReplied: false }],
+  ])("won't re-check %s", async (_label, args) => {
+    const client = await connect();
+    const result = await client.callTool({ name: "recheck_after_reply", arguments: args });
+    expect(result.isError).toBe(true);
+    expect(result.structuredContent).toBeUndefined();
+  });
+
+  it.each([
+    ["at Credit Decision", assessed],
+    ["back at Credit Assessment already", answered],
+    ["decided", reassessed],
+  ])("won't re-check a file that's %s", async (_label, file) => {
+    await expect(
+      refusal(await onFile(file), "recheck_after_reply", REPLIED),
+    ).resolves.toStrictEqual(said("There's no reply to re-check on this file."));
+  });
+
+  it("says when to use it, leaves the handover to Priya's click, and never mentions the Afterpay account", async () => {
+    const client = await connect();
+    const { tools } = await client.listTools();
+    const recheck = tools.find((tool) => tool.name === "recheck_after_reply");
+    expect(recheck?.description).toContain(
+      "Use this only when Priya says the customer has replied to the 'more information needed' text",
+    );
+    expect(recheck?.description).toContain("don't call hand_over_to_assessor after a re-check");
+    expect(recheck?.description).not.toMatch(/afterpay|closed|closure/iu);
+    expect(recheck?.inputSchema).toMatchObject({
+      properties: {
+        customerReplied: {
+          const: true,
+          description: "true only when Priya's message says the customer has replied",
+        },
+      },
+      required: ["applicationId", "customerReplied"],
+    });
+  });
+});
+
 describe("every result, at each step of both visits", () => {
   it("says 'not lender policy' wherever it quotes one of the script's figures", async () => {
     const results = await everyResultAtEachStep();
@@ -448,7 +566,12 @@ describe("every result, at each step of both visits", () => {
       SCRIPT_AMOUNTS.some((amount) => text.includes(amount)),
     );
     expect(new Set(quoting.map(([tool]) => tool))).toStrictEqual(
-      new Set(["indicative_serviceability", "draft_assessor_notes", "hand_over_to_assessor"]),
+      new Set([
+        "indicative_serviceability",
+        "draft_assessor_notes",
+        "hand_over_to_assessor",
+        "recheck_after_reply",
+      ]),
     );
     for (const [tool, text] of quoting) {
       expect(text, tool).toContain("not lender policy");

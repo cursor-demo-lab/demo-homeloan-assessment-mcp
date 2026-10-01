@@ -5,15 +5,18 @@ import { checkDocuments } from "@/assessment/checks";
 import { documentsOnFile } from "@/assessment/documents";
 import { draftAssessorNotes, draftCustomerRequest, HOW_IT_IS_SENT } from "@/assessment/drafts";
 import { handOver } from "@/assessment/handover";
+import { afterTheReply, asTheCallLandsIt, customerReply } from "@/assessment/reply";
 import {
   BASIS,
   CALL_BASIS,
+  firstNamesOf,
   INDICATIVE,
   indicativeServiceability,
 } from "@/assessment/serviceability";
 import { viewFor } from "@/domain/access";
 import type { Application } from "@/domain/application";
 import { currentStage } from "@/domain/application";
+import { STAFF } from "@/domain/people";
 import { STAGES } from "@/domain/stages";
 import { visitsTo } from "@/domain/visits";
 import { applyIntake, capturedOf, changesTheFigures } from "@/intake/apply";
@@ -50,6 +53,23 @@ const document = z.object({
   shows: z.string(),
   verifies: z.array(z.string()),
 });
+const check = z.object({
+  checkId: z.string(),
+  label: z.string(),
+  stated: z.string().nullable(),
+  onDocuments: z.string(),
+  evidence: z.array(z.string()),
+  result: z.enum(["matches", "shown-on-documents", "not-on-call", "closed"]),
+});
+const serviceability = {
+  label: z.literal(INDICATIVE),
+  basis: z.enum([BASIS, CALL_BASIS]),
+  amountNeeded: z.number(),
+  beforeAfterpay: z.number().nullable(),
+  withAfterpay: z.number().nullable(),
+  fallsShort: z.boolean(),
+  summary: z.string(),
+};
 
 const stage2View = z.object({
   id: z.string(),
@@ -291,16 +311,7 @@ export function buildServer(
       inputSchema: onFile,
       outputSchema: z.object({
         visit: z.number().int(),
-        checks: z.array(
-          z.object({
-            checkId: z.string(),
-            label: z.string(),
-            stated: z.string().nullable(),
-            onDocuments: z.string(),
-            evidence: z.array(z.string()),
-            result: z.enum(["matches", "shown-on-documents", "not-on-call", "closed"]),
-          }),
-        ),
+        checks: z.array(check),
         gaps: z.array(z.string()),
         fromCall,
       }),
@@ -315,16 +326,7 @@ export function buildServer(
       title: "Indicative serviceability",
       description: `Indicative borrowing figures for the file, worked out from the call's answers, with the demo script's values for anything the call didn't capture. ${FIGURES_AS_RETURNED} Records nothing.`,
       inputSchema: onFile,
-      outputSchema: z.object({
-        label: z.literal(INDICATIVE),
-        basis: z.enum([BASIS, CALL_BASIS]),
-        amountNeeded: z.number(),
-        beforeAfterpay: z.number().nullable(),
-        withAfterpay: z.number().nullable(),
-        fallsShort: z.boolean(),
-        summary: z.string(),
-        fromCall,
-      }),
+      outputSchema: z.object({ ...serviceability, fromCall }),
       annotations: READ_ONLY,
     },
     withFile(({ application, used, figuresChanged }) =>
@@ -412,6 +414,60 @@ export function buildServer(
         findings: handover.findings,
         stage: currentStage(application),
         message: handover.message,
+      };
+      return answer(marked(output, used(FIGURES)));
+    }),
+  );
+
+  const recheckInput = z.object({
+    applicationId,
+    customerReplied: z
+      .literal(true)
+      .describe("true only when Priya's message says the customer has replied"),
+  });
+  server.registerTool(
+    "recheck_after_reply",
+    {
+      title: "Re-check after the customer's reply",
+      description: `Use this only when Priya says the customer has replied to the 'more information needed' text, and use it instead of the other tools for that re-check: they read the file as the call landed it, before any reply. It reads the file as it stands after the reply, re-checks the documents and the indicative serviceability, and drafts the findings and recommendation that Priya's "Hand over to Credit Decision" button records in the app, word for word. Priya hands the file over in the app and decides, so don't call hand_over_to_assessor after a re-check. ${NO_APPROVAL} ${FIGURES_AS_RETURNED} Records nothing.`,
+      inputSchema: recheckInput,
+      outputSchema: z.object({
+        applicationId: z.string(),
+        reference: z.string(),
+        visit: z.number().int(),
+        reply: z.string(),
+        documents: z.array(document),
+        checks: z.array(check),
+        gaps: z.array(z.string()),
+        serviceability: z.object(serviceability),
+        findings: z.array(z.string()),
+        recommendation: z.string(),
+        recorded: z.literal(false),
+        message: z.string(),
+        fromCall,
+      }),
+      annotations: READ_ONLY,
+    },
+    withFile(({ application, used, figuresChanged }) => {
+      if (!asTheCallLandsIt(application)) {
+        return refuse("There's no reply to re-check on this file.");
+      }
+      const replied = afterTheReply(application);
+      const { checks, gaps } = checkDocuments(replied);
+      const { findings, recommendation } = draftAssessorNotes(replied);
+      const output = {
+        applicationId: replied.id,
+        reference: replied.reference,
+        visit: visitsTo(replied, "credit-assessment"),
+        reply: customerReply(application),
+        documents: documentsOnFile(replied),
+        checks,
+        gaps,
+        serviceability: indicativeServiceability(replied, { figuresChanged }),
+        findings,
+        recommendation,
+        recorded: false,
+        message: `${firstNamesOf(replied)}'s file is re-checked. It stays at Credit Assessment until ${STAFF.assessor.name} hands it over in the app with "Hand over to Credit Decision", which records these findings, and she decides. Nothing is stored here.`,
       };
       return answer(marked(output, used(FIGURES)));
     }),
