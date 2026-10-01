@@ -47,10 +47,7 @@ export function handOver(application: Application, { confirm }: { confirm: boole
     stage: "credit-assessment",
     summary: `On ${ASSESSOR}'s instruction, the Grok Bot prepared its checks for the handover of ${names}'s file to Credit Decision. ${ASSESSOR} hands it over in the app and decides. ${INDICATIVE}.`,
   };
-  const events = [
-    instruction,
-    ...creditAssessmentEvents({ ...application, audit: [...application.audit, instruction] }),
-  ] as const;
+  const events = [instruction, ...creditAssessmentEvents(application)] as const;
   const findings = events.flatMap((event) => (event.kind === "bot-output" ? [event.summary] : []));
 
   return confirm

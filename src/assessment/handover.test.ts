@@ -16,6 +16,8 @@ function recordOf(handover: Handover): readonly AuditEvent[] {
 const summaries = (events: readonly AuditEvent[]) =>
   events.flatMap((event) => (event.kind === "bot-output" ? [event.summary] : []));
 
+const timesOf = (events: readonly AuditEvent[]) => events.map((event) => event.at);
+
 const INSTRUCTION =
   "On Priya Raman's instruction, the Grok Bot prepared its checks for the handover of Mia and Dan's file to Credit Decision. Priya Raman hands it over in the app and decides. Indicative, not lender policy.";
 
@@ -61,6 +63,18 @@ describe("handOver", () => {
       .flat()
       .map((event) => Date.parse(event.at));
     expect(times.toSorted((a, b) => a - b)).toStrictEqual(times);
+  });
+
+  it("stamps the findings and the move at the app's times, after the instruction line", () => {
+    const record = recordOf(handOver(landed, { confirm: true }));
+    expect(timesOf(record)).toStrictEqual([
+      "2026-10-12T19:48:00+11:00",
+      "2026-10-12T19:49:00+11:00",
+      "2026-10-12T19:51:00+11:00",
+      "2026-10-12T19:53:00+11:00",
+      "2026-10-12T19:53:00+11:00",
+    ]);
+    expect(record.slice(1)).toStrictEqual(creditAssessmentEvents(landed));
   });
 
   it("changes nothing on the file it was given", () => {
