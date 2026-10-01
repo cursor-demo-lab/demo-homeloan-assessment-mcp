@@ -4,7 +4,8 @@ import { currentStage } from "@/domain/application";
 import { creditAssessmentEvents } from "./credit-assessment-bot";
 import type { Handover } from "./handover";
 import { handOver } from "./handover";
-import { answered, assessed, landed, withEvents } from "./journey.fixture";
+import { answered, assessed, landed } from "./journey.fixture";
+import { withEvents } from "./reply";
 
 function recordOf(handover: Handover): readonly AuditEvent[] {
   if (!handover.ok || handover.status !== "ready-to-hand-over") {
