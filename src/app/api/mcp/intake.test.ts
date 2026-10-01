@@ -231,7 +231,7 @@ describe("after a call with different answers", () => {
     await client.close();
   });
 
-  it("gives the script's figures, marked as the call's, when the call follows the script", async () => {
+  it("gives the script's figures and basis, marked as the call's, when the call follows the script", async () => {
     await post(SCRIPTED_ANSWERS);
     const { client, call } = await connect(landed);
     const scripted = GOLDEN.find(
@@ -240,6 +240,15 @@ describe("after a call with different answers", () => {
     const reply = scripted && (JSON.parse(scripted.reply) as { structuredContent: object });
     await expect(call("indicative_serviceability")).resolves.toStrictEqual({
       ...reply?.structuredContent,
+      fromCall: FIGURES,
+    });
+    await client.close();
+  });
+
+  it("says the figures were worked out from the call once one of them differs from the script", async () => {
+    await post({ ...SCRIPTED_ANSWERS, deposit: "A$170,000" });
+    const { client, call } = await connect(landed);
+    await expect(call("indicative_serviceability")).resolves.toMatchObject({
       basis:
         "Worked out from the call's answers, with the demo script's values for anything the call didn't capture.",
       fromCall: FIGURES,

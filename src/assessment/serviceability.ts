@@ -56,13 +56,13 @@ export function firstNamesOf(application: Application): string {
 
 export function indicativeServiceability(
   application: Application,
-  { fromCall = false }: { readonly fromCall?: boolean } = {},
+  { figuresChanged = false }: { readonly figuresChanged?: boolean } = {},
 ): IndicativeServiceability {
   const names = firstNamesOf(application);
   const { beforeAfterpay, withAfterpay, amountNeeded } = indicativeBorrowing(application);
   const labelled = {
     label: INDICATIVE,
-    basis: fromCall ? CALL_BASIS : BASIS,
+    basis: figuresChanged ? CALL_BASIS : BASIS,
     amountNeeded,
   } as const;
   const need = `${names} need (${about(amountNeeded)}). ${INDICATIVE}.`;

@@ -4,7 +4,7 @@ import { indicativeBorrowing } from "@/assessment/serviceability";
 import { SCRIPT_FIGURES } from "@/domain/figures";
 import { MIA_AND_DAN_AFTER_CALL } from "@/domain/fixtures/mia-and-dan";
 import { SCRIPTED_ANSWERS, VARIED_ANSWERS } from "./answers.fixture";
-import { applyIntake, capturedOf, fitsTheFile } from "./apply";
+import { applyIntake, capturedOf, changesTheFigures, fitsTheFile } from "./apply";
 import type { IntakeFields } from "./fields";
 import { INTAKE_KEYS, intakeFields } from "./fields";
 
@@ -140,6 +140,35 @@ describe("capturedOf", () => {
       "first_home",
     ]);
     expect(capturedOf(parsed(SCRIPTED_ANSWERS))).toStrictEqual([...INTAKE_KEYS]);
+  });
+});
+
+describe("changesTheFigures", () => {
+  it.each([
+    ["the script's answers", SCRIPTED_ANSWERS, false],
+    ["nothing", {}, false],
+    ["only the script's deposit", { deposit: "A$160,000" }, false],
+    [
+      "the script's figures with other names, work, area and first home",
+      {
+        ...SCRIPTED_ANSWERS,
+        applicant_1_name: "Sofia Reyes",
+        applicant_2_employment: "Electrician, self employed, Nguyen Electrical",
+        target_area: "Brunswick, VIC",
+        first_home: "No",
+      },
+      false,
+    ],
+    ["another income", { ...SCRIPTED_ANSWERS, applicant_2_income: "A$99,000 a year" }, true],
+    ["another price", { purchase_price: "A$960,000" }, true],
+    ["another deposit", { ...SCRIPTED_ANSWERS, deposit: "A$150,000" }, true],
+    ["another repayment", { declared_debts: "Credit card, A$8,000 limit, A$250 a month" }, true],
+    ["another debt", { declared_debts: "Car loan, A$8,000 limit, A$240 a month" }, true],
+    ["no debts", { declared_debts: "None" }, true],
+    ["every answer from a different call", VARIED_ANSWERS, true],
+  ])("with %s: %s", (_label, fields, changes) => {
+    expect(changesTheFigures(landed, parsed(fields))).toBe(changes);
+    expect(changesTheFigures(answered, parsed(fields))).toBe(changes);
   });
 });
 

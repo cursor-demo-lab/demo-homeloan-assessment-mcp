@@ -74,6 +74,29 @@ export function applyIntake(application: Application, fields: IntakeFields): App
   };
 }
 
+/** What the borrowing is worked out from: the incomes, the debts, the price and the deposit. */
+function figureInputsOf({ applicants, commitments, goal }: Application): string {
+  return JSON.stringify([
+    applicants.map(({ annualIncome }) => annualIncome.value),
+    commitments.value.map(({ kind, description, limitOrBalance, monthlyRepayment }) => [
+      kind,
+      description,
+      limitOrBalance,
+      monthlyRepayment,
+    ]),
+    goal.purchasePrice.value,
+    goal.deposit.value,
+  ]);
+}
+
+/**
+ * Whether the call's answers change anything the borrowing is worked out from. A call that
+ * gives the script's incomes, debts, price and deposit changes nothing, whatever else it says.
+ */
+export function changesTheFigures(application: Application, fields: IntakeFields): boolean {
+  return figureInputsOf(applyIntake(application, fields)) !== figureInputsOf(application);
+}
+
 /** False when the deposit would be more than the price, once the script fills in either. */
 export function fitsTheFile(fields: IntakeFields): boolean {
   const { goal } = MIA_AND_DAN_AFTER_CALL;

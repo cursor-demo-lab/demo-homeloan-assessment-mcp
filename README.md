@@ -30,7 +30,7 @@ server <url>".
 | `list_applications` | Lists the files at Credit Assessment, with the visit and how many items each has to check. |
 | `get_application` | Reads one file as Credit Assessment sees it. Never shows contact details or the appointment. |
 | `check_documents` | Cross-checks what the call stated against the documents on file and lists the open gaps. |
-| `indicative_serviceability` | Indicative borrowing figures, worked out from the call's answers, labelled "Indicative, not lender policy". With no answers they are the demo script's. |
+| `indicative_serviceability` | Indicative borrowing figures, worked out from the call's answers, labelled "Indicative, not lender policy". When the call's incomes, debts, price and deposit are the script's, or it gave none, they are the demo script's, with the script's `basis`. |
 | `draft_assessor_notes` | Drafts the assessor's findings and the bot's recommendation, with the same label. |
 | `draft_customer_request` | Drafts a text to the customer about the gap. It is never sent from here. |
 | `hand_over_to_assessor` | Without `confirm`, returns what the handover would record. With `confirm: true`, returns the handover record. Nothing is stored either way. |
@@ -40,7 +40,8 @@ Every tool but `list_applications` takes `applicationId`. The fixture's id is
 
 When a reply uses answers from the latest call, it ends with `fromCall`, the intake
 keys it used. With no answers stored, every reply is the same as before the intake
-existed, byte for byte.
+existed, byte for byte. With the script's answers stored, every reply is the same apart
+from `fromCall`.
 
 ## The intake
 

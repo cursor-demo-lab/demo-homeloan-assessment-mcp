@@ -16,7 +16,7 @@ import type { Application } from "@/domain/application";
 import { currentStage } from "@/domain/application";
 import { STAGES } from "@/domain/stages";
 import { visitsTo } from "@/domain/visits";
-import { applyIntake, capturedOf } from "@/intake/apply";
+import { applyIntake, capturedOf, changesTheFigures } from "@/intake/apply";
 import type { IntakeFields, IntakeKey } from "@/intake/fields";
 import { INTAKE_FILE, INTAKE_KEYS } from "@/intake/fields";
 import { tokenRefusal } from "./auth";
@@ -140,6 +140,8 @@ interface OnFile {
   readonly application: Application;
   /** The keys among `keys` that came from the latest call. */
   readonly used: (keys: readonly IntakeKey[]) => IntakeKey[];
+  /** Whether the call's incomes, debts, price or deposit differ from the script's. */
+  readonly figuresChanged: boolean;
 }
 
 /** The call's answers apply only to the file the app's call writes to. */
@@ -148,6 +150,7 @@ function onCall(file: Application, fields: IntakeFields): OnFile {
   return {
     application: applyIntake(file, answers),
     used: (keys) => capturedOf(answers, keys),
+    figuresChanged: changesTheFigures(file, answers),
   };
 }
 
@@ -324,13 +327,8 @@ export function buildServer(
       }),
       annotations: READ_ONLY,
     },
-    withFile(({ application, used }) =>
-      answer(
-        marked(
-          indicativeServiceability(application, { fromCall: used(FIGURE_INPUTS).length > 0 }),
-          used(FIGURES),
-        ),
-      ),
+    withFile(({ application, used, figuresChanged }) =>
+      answer(marked(indicativeServiceability(application, { figuresChanged }), used(FIGURES))),
     ),
   );
 

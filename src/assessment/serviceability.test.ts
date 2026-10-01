@@ -38,8 +38,8 @@ describe("indicativeServiceability", () => {
     expect(JSON.stringify(recheck)).not.toMatch(/810|760/u);
   });
 
-  it("says the figures were worked out from the call when its answers were used", () => {
-    expect(indicativeServiceability(landed, { fromCall: true }).basis).toBe(
+  it("says the figures were worked out from the call when its answers changed them", () => {
+    expect(indicativeServiceability(landed, { figuresChanged: true }).basis).toBe(
       "Worked out from the call's answers, with the demo script's values for anything the call didn't capture.",
     );
   });
