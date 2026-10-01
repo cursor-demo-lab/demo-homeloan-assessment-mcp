@@ -518,14 +518,20 @@ describe("the re-check after the customer's reply", () => {
     );
   });
 
-  it.each([
-    ["without customerReplied", MIA_AND_DAN],
-    ["with customerReplied false", { ...MIA_AND_DAN, customerReplied: false }],
-  ])("won't re-check %s", async (_label, args) => {
+  it("won't re-check without customerReplied", async () => {
     const client = await connect();
-    const result = await client.callTool({ name: "recheck_after_reply", arguments: args });
+    const result = await client.callTool({ name: "recheck_after_reply", arguments: MIA_AND_DAN });
     expect(result.isError).toBe(true);
     expect(result.structuredContent).toBeUndefined();
+  });
+
+  it("won't re-check until Priya says the customer has replied", async () => {
+    const client = await connect();
+    await expect(
+      refusal(client, "recheck_after_reply", { ...MIA_AND_DAN, customerReplied: false }),
+    ).resolves.toStrictEqual(
+      said("There's nothing to re-check until Priya says the customer has replied."),
+    );
   });
 
   it.each([
@@ -550,7 +556,7 @@ describe("the re-check after the customer's reply", () => {
     expect(recheck?.inputSchema).toMatchObject({
       properties: {
         customerReplied: {
-          const: true,
+          type: "boolean",
           description: "true only when Priya's message says the customer has replied",
         },
       },

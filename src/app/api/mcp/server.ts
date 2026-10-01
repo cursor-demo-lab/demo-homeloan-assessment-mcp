@@ -422,7 +422,7 @@ export function buildServer(
   const recheckInput = z.object({
     applicationId,
     customerReplied: z
-      .literal(true)
+      .boolean()
       .describe("true only when Priya's message says the customer has replied"),
   });
   server.registerTool(
@@ -448,29 +448,37 @@ export function buildServer(
       }),
       annotations: READ_ONLY,
     },
-    withFile(({ application, used, figuresChanged }) => {
-      if (!asTheCallLandsIt(application)) {
-        return refuse("There's no reply to re-check on this file.");
-      }
-      const replied = afterTheReply(application);
-      const { checks, gaps } = checkDocuments(replied);
-      const { findings, recommendation } = draftAssessorNotes(replied);
-      const output = {
-        applicationId: replied.id,
-        reference: replied.reference,
-        visit: visitsTo(replied, "credit-assessment"),
-        reply: customerReply(application),
-        documents: documentsOnFile(replied),
-        checks,
-        gaps,
-        serviceability: indicativeServiceability(replied, { figuresChanged }),
-        findings,
-        recommendation,
-        recorded: false,
-        message: `${firstNamesOf(replied)}'s file is re-checked. It stays at Credit Assessment until ${STAFF.assessor.name} hands it over in the app with "Hand over to Credit Decision", which records these findings, and she decides. Nothing is stored here.`,
-      };
-      return answer(marked(output, used(FIGURES)));
-    }),
+    withFile(
+      (
+        { application, used, figuresChanged },
+        { customerReplied }: z.output<typeof recheckInput>,
+      ) => {
+        if (!customerReplied) {
+          return refuse("There's nothing to re-check until Priya says the customer has replied.");
+        }
+        if (!asTheCallLandsIt(application)) {
+          return refuse("There's no reply to re-check on this file.");
+        }
+        const replied = afterTheReply(application);
+        const { checks, gaps } = checkDocuments(replied);
+        const { findings, recommendation } = draftAssessorNotes(replied);
+        const output = {
+          applicationId: replied.id,
+          reference: replied.reference,
+          visit: visitsTo(replied, "credit-assessment"),
+          reply: customerReply(application),
+          documents: documentsOnFile(replied),
+          checks,
+          gaps,
+          serviceability: indicativeServiceability(replied, { figuresChanged }),
+          findings,
+          recommendation,
+          recorded: false,
+          message: `${firstNamesOf(replied)}'s file is re-checked. It stays at Credit Assessment until ${STAFF.assessor.name} hands it over in the app with "Hand over to Credit Decision", which records these findings, and she decides. Nothing is stored here.`,
+        };
+        return answer(marked(output, used(FIGURES)));
+      },
+    ),
   );
 
   return server;
