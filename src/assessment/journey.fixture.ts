@@ -2,7 +2,7 @@ import type { Application, AuditEvent } from "@/domain/application";
 import { decisionReason, eventId } from "@/domain/application";
 import { MIA_AND_DAN_AFTER_CALL } from "@/domain/fixtures/mia-and-dan";
 import { STAFF } from "@/domain/people";
-import { storyTimeAfter } from "@/domain/story-clock";
+import { storyTimeAfter, storyWorkingTimeAfter } from "@/domain/story-clock";
 import { creditAssessmentEvents } from "./credit-assessment-bot";
 
 /** Mia and Dan through the demo's loop: more info, the Afterpay account closed, then the re-check. */
@@ -17,7 +17,7 @@ export const withEvents = (
 function sendBack(application: Application): Application {
   const id = `${application.id}-credit-decision-visit-1`;
   const base = { applicationId: application.id };
-  const at = (minutes: number) => storyTimeAfter(application, minutes);
+  const at = (minutes: number) => storyWorkingTimeAfter(application, minutes);
   return withEvents(application, [
     {
       ...base,

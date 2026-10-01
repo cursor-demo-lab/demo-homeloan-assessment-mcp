@@ -77,6 +77,23 @@ describe("handOver", () => {
     expect(record.slice(1)).toStrictEqual(creditAssessmentEvents(landed));
   });
 
+  it("stamps the second visit at the app's times, after Priya's decision the next working morning", () => {
+    expect(timesOf(answered.audit.slice(assessed.audit.length))).toStrictEqual([
+      "2026-10-13T09:02:00+11:00",
+      "2026-10-13T09:03:00+11:00",
+      "2026-10-13T09:04:00+11:00",
+      "2026-10-13T10:04:00+11:00",
+      "2026-10-13T10:05:00+11:00",
+    ]);
+    expect(timesOf(recordOf(handOver(answered, { confirm: true })))).toStrictEqual([
+      "2026-10-13T10:06:00+11:00",
+      "2026-10-13T10:07:00+11:00",
+      "2026-10-13T10:09:00+11:00",
+      "2026-10-13T10:11:00+11:00",
+      "2026-10-13T10:11:00+11:00",
+    ]);
+  });
+
   it("changes nothing on the file it was given", () => {
     const before = structuredClone(landed);
     handOver(landed, { confirm: true });
